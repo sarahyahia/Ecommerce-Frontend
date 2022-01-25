@@ -1,4 +1,5 @@
 <template>
+<!-- <div> -->
   <div id="app" class="h-100">
     <div class="container-fluid h-100">
       <div class="row h-100">
@@ -7,21 +8,25 @@
         </div>
         <div class="col-md-9 h-100 d-flex justify-content-center align-items-center">
           <div class="col-md-8 rounded px-5 py-4 shadow bg-white text-left">
-            <SignupForm />
+            <!-- <SignupForm /> -->
+            <VuetifyForm/>
+
           </div>
         </div>
       </div>
     </div>
   </div>
+<!-- </div> -->
 </template>
 
 <script>
-import SignupForm from './components/SignupForm.vue'
-
+// import SignupForm from './components/SignupForm.vue'
+import VuetifyForm from './components/VuetifyForm.vue'
 export default {
   name: 'App',
   components: {
-    SignupForm
+    // SignupForm,
+    VuetifyForm,
   }
 }
 </script>
