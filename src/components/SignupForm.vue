@@ -68,7 +68,8 @@ export default {
         birthDate:{required},
         password:{required, minLength: minLength(6), maxLength: maxLength(18)}
     },
-    mounted: function() {
+    created: function() {
+        alert('created')
         var v = this;
         v.$http.get(`http://localhost:4600/countries`)
         .then(function(resp) {
@@ -77,6 +78,21 @@ export default {
         .catch(function(err) {
             console.log(err)
         });
+    },
+    beforeCreate: function(){
+        alert('beforeCreate');
+    },
+    beforeMount: function(){
+        alert('beforeMount');
+    },
+    mounted: function(){
+        alert('mounted');
+    },
+    beforeUpdate: function(){
+        alert('beforeUpdate');
+    },
+    updated: function(){
+        alert('updated');
     },
     methods: {
        resetData: function() {

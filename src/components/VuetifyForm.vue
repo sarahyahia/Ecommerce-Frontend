@@ -1,9 +1,8 @@
 <template>
-    <v-app>
-        <!-- <v-spacer class="p-5"></v-spacer> -->
-        <v-card>
+    
+        <v-card class="p-3 mt-5">
             <v-card-title>
-                <h1 class="display-1">Login</h1>
+                <h2 class="display-1">Login</h2>
             </v-card-title>
             <v-card-text>
                 <v-form>
@@ -23,7 +22,6 @@
                         v-model="password"
                         :error-messages="passwordErrors"
                         required
-
                         prepend-icon="mdi-lock"
                         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                         @click:append="showPassword = !showPassword"
@@ -40,12 +38,11 @@
                 </v-form>
             </v-card-text>
             <v-divider></v-divider>
-            <v-card-actions class="">
+            <v-card-actions class="ml-3 mb-3">
                 <v-btn @click="submit" color="success">Login</v-btn>
                 <v-btn @click="clear">clear</v-btn>
             </v-card-actions>
         </v-card>
-    </v-app>
 </template>
 <script>
     import { validationMixin } from 'vuelidate'
@@ -92,7 +89,8 @@
         methods: {
             submit () {
                 this.$v.$touch()
-                this.methods.clear()
+                if (this.$v.$pendding || this.$v.$error) return;
+                this.clear()
                 alert('Data Submit')
             },
             clear () {
@@ -102,6 +100,24 @@
                 this.showPassword = false
                 this.checkbox = false
             }
+        },
+        beforeCreate(){
+            alert('beforeCreate');
+        },
+        created(){
+            alert('created');
+        },
+        beforeMount(){
+            alert('beforeMount');
+        },
+        mounted(){
+            alert('mounted');
+        },
+        beforeUpdate(){
+            alert('beforeUpdate');
+        },
+        updated(){
+            alert('updated');
         }
-    }
+        }
 </script>
