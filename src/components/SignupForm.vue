@@ -16,10 +16,16 @@
             </div>
             <div class="col-12 form-group">
                 <label class="col-form-label col-form-label-lg">Country <span class="text-danger">*</span></label>
-                <select class="form-control form-control-lg" v-model.trim="$v.country.$model" :class="{'is-invalid':validationStatus($v.country)}">
+                <!-- <select class="form-control form-control-lg" v-model.trim="$v.country.$model" :class="{'is-invalid':validationStatus($v.country)}">
                     <option value="">Select Country</option>
                     <option :value="c.iso" :key="c.iso" v-for="c in countryList">{{ c.country }}</option>
-                </select>
+                </select> -->
+                <v-autocomplete
+                    v-model="value"
+                    :items="countryList.map(a => a.country)"
+                    dense
+                    filled
+                ></v-autocomplete>
                 <div v-if="!$v.country.required" class="invalid-feedback">The country field is required.</div>
             </div>
             <div class="col-12 form-group">
@@ -58,7 +64,8 @@ export default {
             birthDate: '',
             password: '',
             remeberMe: '',
-            countryList: []
+            countryList: [],
+            value: null
         }
     },
     validations: {
@@ -69,7 +76,7 @@ export default {
         password:{required, minLength: minLength(6), maxLength: maxLength(18)}
     },
     created: function() {
-        alert('created')
+        // alert('created')
         var v = this;
         v.$http.get(`http://localhost:4600/countries`)
         .then(function(resp) {
@@ -79,21 +86,27 @@ export default {
             console.log(err)
         });
     },
-    beforeCreate: function(){
-        alert('beforeCreate');
-    },
-    beforeMount: function(){
-        alert('beforeMount');
-    },
-    mounted: function(){
-        alert('mounted');
-    },
-    beforeUpdate: function(){
-        alert('beforeUpdate');
-    },
-    updated: function(){
-        alert('updated');
-    },
+    // computed: {
+    //   filteredData(){
+    //       return this.countryList.filter(item => item === this.selectedValue)
+    //   }
+
+    // },
+    // beforeCreate: function(){
+    //     alert('beforeCreate');
+    // },
+    // beforeMount: function(){
+    //     alert('beforeMount');
+    // },
+    // mounted: function(){
+    //     alert("mounted");
+    // },
+    // beforeUpdate: function(){
+    //     alert('beforeUpdate');
+    // },
+    // updated: function(){
+    //     alert('updated');
+    // },
     methods: {
        resetData: function() {
             this.fullname = '';
@@ -112,7 +125,7 @@ export default {
             alert('Data Submit');
             this.$v.$reset();
             this.resetData();
-        }
+        },
     }
 }
 </script>

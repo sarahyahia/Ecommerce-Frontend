@@ -8,7 +8,10 @@
         </div>
         <div class="col-md-9 h-100 d-flex justify-content-center align-items-center">
           <div class="col-md-8 rounded px-5 py-5 shadow bg-white text-left">
-            <SignupForm />
+            <!-- <SignupForm />
+            <v-divider></v-divider> -->
+            <ComputedExample/>
+
             <!-- <div class="mt-5"></div>
             <VuetifyForm/> -->
 
@@ -21,12 +24,14 @@
 </template>
 
 <script>
-import SignupForm from './components/SignupForm.vue'
+// import SignupForm from './components/SignupForm.vue'
+import ComputedExample from './components/ComputedExample.vue'
 // import VuetifyForm from './components/VuetifyForm.vue'
 export default {
   name: 'App',
   components: {
-    SignupForm,
+    // SignupForm,
+    ComputedExample,
     // VuetifyForm,
   }
 }
