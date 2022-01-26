@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VuetifyForm from '../components/VuetifyForm.vue'
+import LoginForm from '../views/LoginForm.vue'
+import SignupForm from '../views/SignupForm.vue'
+import Computed from '../views/Computed.vue'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 
@@ -13,9 +15,19 @@ const routes = [
     component: Home
   },
   {
-    path: '/login',
-    name: 'VuetifyForm',
-    component: VuetifyForm
+    path: '/signin',
+    name: 'LoginForm',
+    component: LoginForm
+  },
+  {
+    path: '/signup',
+    name: 'SignupForm',
+    component: SignupForm
+  },
+  {
+    path: '/computed',
+    name: 'Computed',
+    component: Computed
   },
   {
     path: '/about',

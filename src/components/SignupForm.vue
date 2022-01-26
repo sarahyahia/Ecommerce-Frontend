@@ -1,5 +1,8 @@
 <template>
     <form id="signup-form" v-on:submit.prevent="submit">
+            <v-card-title>
+                <h2 class="display-1">Create a new account</h2>
+            </v-card-title>
         <div class="row">
             <div class="col-12 form-group">
                 <label class="col-form-label col-form-label-lg">Full Name <span class="text-danger">*</span></label>
@@ -21,10 +24,11 @@
                     <option :value="c.iso" :key="c.iso" v-for="c in countryList">{{ c.country }}</option>
                 </select> -->
                 <v-autocomplete
-                    v-model="value"
+                    v-model.trim="$v.country.$model"
                     :items="countryList.map(a => a.country)"
+                    :class="{'is-invalid':validationStatus($v.country)}"
                     dense
-                    filled
+                    outlined
                 ></v-autocomplete>
                 <div v-if="!$v.country.required" class="invalid-feedback">The country field is required.</div>
             </div>

@@ -3,6 +3,7 @@ import App from './App.vue'
 import Vuelidate from 'vuelidate'
 import axios from 'axios'
 import vuetify from './plugins/vuetify'
+import "vuetify/dist/vuetify.min.css";
 import router from './router'
 
 

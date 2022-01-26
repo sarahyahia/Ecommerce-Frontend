@@ -1,39 +1,68 @@
 <template>
-<!-- <div> -->
-  <v-app id="app" class="h-100">
-    <div class="container-fluid h-100">
-      <div class="row h-100">
-        <div class="col-md-3 vue-bg h-100 d-flex justify-content-center align-items-center">
-          <img alt="Vue logo" src="./assets/logo.png" width="100">
-        </div>
-        <div class="col-md-9 h-100 d-flex justify-content-center align-items-center">
-          <div class="col-md-8 rounded px-5 py-5 shadow bg-white text-left">
-            <!-- <SignupForm />
-            <v-divider></v-divider> -->
-            <ComputedExample/>
+ <v-app>
+    <v-navigation-drawer v-model="sidebar" app>
+      <v-list>
+        <v-list-tile
+          v-for="item in menuItems"
+          :key="item.title"
+          :to="item.path">
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>{{ item.title }}</v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
 
-            <!-- <div class="mt-5"></div>
-            <VuetifyForm/> -->
-
-          </div>
-        </div>
-      </div>
-    </div>
+    <v-toolbar app  style="background-color:#eee">
+      <span class="hidden-sm-and-up">
+        <v-toolbar-side-icon @click="sidebar = !sidebar">
+        </v-toolbar-side-icon>
+      </span>
+      <v-toolbar-title>
+        <router-link to="/" tag="span" style="cursor: pointer">
+          {{ appTitle }}
+        </router-link>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items  style="background-color:#eee" class="hidden-xs-only">
+        <v-btn
+          flat
+          v-for="item in menuItems"
+          :key="item.title"
+          :to="item.path">
+          <v-icon left dark>{{ item.icon }}</v-icon>
+          {{ item.title }}
+        </v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+    
   </v-app>
-<!-- </div> -->
 </template>
 
 <script>
-// import SignupForm from './components/SignupForm.vue'
-import ComputedExample from './components/ComputedExample.vue'
-// import VuetifyForm from './components/VuetifyForm.vue'
+
 export default {
   name: 'App',
   components: {
-    // SignupForm,
-    ComputedExample,
-    // VuetifyForm,
-  }
+  
+  },
+  data(){
+    return {
+      appTitle: 'Vue App',
+      sidebar: false,
+      menuItems: [
+          { title: 'Home', path: '/', icon: 'home' },
+          { title: 'SignUp', path: '/signup', icon: 'face' },
+          { title: 'Sign In', path: '/signin', icon: 'lock_open' },
+          { title: 'Computed', path: '/computed', icon: 'example' }
+     ]
+    }
+  },
 }
 </script>
 
