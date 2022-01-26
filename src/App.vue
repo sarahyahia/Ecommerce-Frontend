@@ -2,22 +2,22 @@
  <v-app>
     <v-navigation-drawer v-model="sidebar" app>
       <v-list>
-        <v-list-tile
+        <v-list-item
           v-for="item in menuItems"
           :key="item.title"
           :to="item.path">
-          <v-list-tile-action>
+          <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>{{ item.title }}</v-list-tile-content>
-        </v-list-tile>
+          </v-list-item-action>
+          <v-list-item-content>{{ item.title }}</v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar app  style="background-color:#eee">
-      <span class="hidden-sm-and-up">
-        <v-toolbar-side-icon @click="sidebar = !sidebar">
-        </v-toolbar-side-icon>
+    <v-app-bar app  style="background-color:#eee">
+      <span >
+        <v-app-bar-nav-icon @click="sidebar = !sidebar">
+        </v-app-bar-nav-icon>
       </span>
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer">
@@ -27,7 +27,7 @@
       <v-spacer></v-spacer>
       <v-toolbar-items  style="background-color:#eee" class="hidden-xs-only">
         <v-btn
-          flat
+          text
           v-for="item in menuItems"
           :key="item.title"
           :to="item.path">
@@ -35,11 +35,11 @@
           {{ item.title }}
         </v-btn>
       </v-toolbar-items>
-    </v-toolbar>
+    </v-app-bar>
     
-    <v-content>
+    <v-main>
       <router-view></router-view>
-    </v-content>
+    </v-main>
     
   </v-app>
 </template>
@@ -59,7 +59,7 @@ export default {
           { title: 'Home', path: '/', icon: 'home' },
           { title: 'SignUp', path: '/signup', icon: 'face' },
           { title: 'Sign In', path: '/signin', icon: 'lock_open' },
-          { title: 'Computed', path: '/computed', icon: 'example' }
+          { title: 'Computed', path: '/computed', icon: '' }
      ]
     }
   },
