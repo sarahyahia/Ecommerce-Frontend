@@ -22,6 +22,16 @@ export default {
   name: 'Computed',
   components: {
     ComputedExample,
-  }
+  },
+  data() {
+    return {
+      value: 'Sarah',
+    }
+  },
+  mounted () {
+    this.$store.commit('changeUsernameValue', this.value);
+    console.log(this.$store.state.user.username);
+    this.$store.dispatch('increment')
+},
 }
 </script>
