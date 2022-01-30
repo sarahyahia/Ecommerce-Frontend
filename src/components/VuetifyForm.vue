@@ -10,7 +10,6 @@
                         label="Username"
                         v-model="username"
                         :error-messages="usernameErrors"
-                        :counter="10"
                         required
                         @input="$v.username.$touch()"
                         @blur="$v.username.$touch()"
@@ -34,7 +33,7 @@
                         @change="$v.checkbox.$touch()"
                         @blur="$v.checkbox.$touch()"
                     ></v-checkbox>
-                        
+                        <p v-if="msg">{{ msg }}</p>
                 </v-form>
             </v-card-text>
             <v-divider></v-divider>
@@ -45,6 +44,7 @@
         </v-card>
 </template>
 <script>
+    import AuthService from '@/services/AuthService.js';
     import { validationMixin } from 'vuelidate'
     import { required, maxLength } from 'vuelidate/lib/validators'
     export default{
@@ -64,12 +64,13 @@
             password:'',
             showPassword : false,
             checkbox: false,
+            msg: '',
         }),
         computed : {
             usernameErrors () {
                 const errors = []
                 if (!this.$v.username.$dirty) return errors
-                !this.$v.username.maxLength && errors.push('Username must be at most 10 characters long')
+                // !this.$v.username.maxLength && errors.push('Username must be at most 10 characters long')
                 !this.$v.username.required && errors.push('username is required.')
                 return errors
             },
@@ -87,11 +88,32 @@
                     },
             },
         methods: {
-            submit () {
-                this.$v.$touch()
-                if (this.$v.$pendding || this.$v.$error) return;
-                this.clear()
-                alert('Data Submit')
+            async submit () {
+                // this.$v.$touch()
+                // if (this.$v.$pendding || this.$v.$error) return;
+                console.log('dsf');
+                try {
+                    console.log('response');
+
+                    const credentials ={
+                        email: this.username,
+                        password: this.password
+                    };
+                    const response = await AuthService.login(credentials);
+                    console.log(response);
+                    // this.msg = response.msg;
+                    const token = response.token;
+                    const user = {
+                        username: this.username,
+                    };
+                    this.$store.dispatch('login', { token, user });
+                    this.$router.push('/about');
+                }catch (error) {
+                    console.log(error.response.data.error);
+                    this.msg = error.response.data.error;
+                }
+                this.clear();
+                alert('Data Submit');
             },
             clear () {
                 this.$v.$reset()
@@ -99,7 +121,21 @@
                 this.password = ''
                 this.showPassword = false
                 this.checkbox = false
-            }
+            },
+            // async login () {
+            //     try {
+            //         const credentials ={
+            //             email: this.username,
+            //             password: this.password
+            //         };
+            //         const response = await AuthService.login(credentials);
+            //         this.msg = response.token;
+            //         console.log(response);
+            //     }catch (error) {
+            //         this.msg = error.error;
+            //     }
+            // }
+
         },
         // beforeCreate(){
         //     alert('beforeCreate');

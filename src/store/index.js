@@ -2,19 +2,31 @@
  
 import Vue from "vue";
 import Vuex from "vuex";
- 
+import Axios from 'axios';
+import createPersistedState from 'vuex-persistedstate';
+
 Vue.use(Vuex);
- 
+
+const getDefaultState = () => {
+    return {
+      token: '',
+      user: {},
+      count: 0,
+    };
+  };
+
 export default new Vuex.Store({
- state: {
-    user: {
-        username: 'matt',
-        fullName: 'Matt Maribojoc'
+ strict: true,
+ plugins: [createPersistedState()],
+ state: getDefaultState(),
+ getters: {
+    isLoggedIn: state => {
+      return state.token;
     },
-    count: 0,
-      
- },
- getters: {},
+    getUser: state => {
+      return state.user;
+    }
+  },
  mutations: {
     changeUsernameValue(state, username) {
         state.user.username = username
@@ -22,10 +34,25 @@ export default new Vuex.Store({
     increment (state) {
         state.count++
     },
+    SET_TOKEN: (state, token) => {
+        state.token = token;
+    },
+    SET_USER: (state, user) => {
+        state.user = user;
+    },
+    RESET: state => {
+        Object.assign(state, getDefaultState());
+    },
  },
  actions: {
     increment (context) {
       context.commit('increment')
+    },
+    login: ({ commit }, { token, user }) => {
+        commit('SET_TOKEN', token);
+        commit('SET_USER', user);
+        // set auth header
+        Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     }
  }
 });

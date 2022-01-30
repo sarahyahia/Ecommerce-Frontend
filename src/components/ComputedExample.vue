@@ -1,7 +1,7 @@
 <template>
     <v-card class="p-3">   
         <div id="demo">{{ this.$store.state.user.username }}</div>
-        <div>from computed {{ fromComputed }} </div>
+        <div>from computed properities {{ fromComputed }} </div>
         <div>from vuex store {{ this.$store.state.count }}</div>
     </v-card>  
 </template>

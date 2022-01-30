@@ -25,11 +25,11 @@ export default {
   },
   data() {
     return {
-      value: 'Sarah',
+      // value: 'Sarah',
     }
   },
   mounted () {
-    this.$store.commit('changeUsernameValue', this.value);
+    // this.$store.commit('changeUsernameValue', this.value);
     console.log(this.$store.state.user.username);
     this.$store.dispatch('increment')
 },
