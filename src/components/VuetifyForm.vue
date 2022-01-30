@@ -6,6 +6,12 @@
             </v-card-title>
             <v-card-text>
                 <v-form>
+                    <v-alert
+                        v-if='msg'
+                        border="top"
+                        color="red lighten-2"
+                        dark
+                    >{{ msg }}</v-alert>
                     <v-text-field 
                         label="Username"
                         v-model="username"
@@ -33,7 +39,6 @@
                         @change="$v.checkbox.$touch()"
                         @blur="$v.checkbox.$touch()"
                     ></v-checkbox>
-                        <p v-if="msg">{{ msg }}</p>
                 </v-form>
             </v-card-text>
             <v-divider></v-divider>

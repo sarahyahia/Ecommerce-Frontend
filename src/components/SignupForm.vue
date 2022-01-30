@@ -4,6 +4,12 @@
                 <h2 class="display-1">Create a new account</h2>
             </v-card-title>
         <div class="row">
+              <v-alert
+              v-if='msg'
+                border="top"
+                color="red lighten-2"
+                dark
+            >{{ msg }}</v-alert>
             <div class="col-12 form-group">
                 <label class="col-form-label col-form-label-lg">Full Name <span class="text-danger">*</span></label>
                 <input type="text" v-model.trim="$v.fullname.$model" :class="{'is-invalid': validationStatus($v.fullname)}" class="form-control form-control-lg">
@@ -57,6 +63,7 @@
     </form>
 </template>
 <script>
+import AuthService from '@/services/AuthService.js';
 import { required, email, minLength, maxLength } from 'vuelidate/lib/validators'
 export default {
     name: 'SignupForm',
@@ -69,7 +76,8 @@ export default {
             password: '',
             remeberMe: '',
             countryList: [],
-            value: null
+            value: null,
+            msg: '',
         }
     },
     validations: {
@@ -90,27 +98,6 @@ export default {
             console.log(err)
         });
     },
-    // computed: {
-    //   filteredData(){
-    //       return this.countryList.filter(item => item === this.selectedValue)
-    //   }
-
-    // },
-    // beforeCreate: function(){
-    //     alert('beforeCreate');
-    // },
-    // beforeMount: function(){
-    //     alert('beforeMount');
-    // },
-    // mounted: function(){
-    //     alert("mounted");
-    // },
-    // beforeUpdate: function(){
-    //     alert('beforeUpdate');
-    // },
-    // updated: function(){
-    //     alert('updated');
-    // },
     methods: {
        resetData: function() {
             this.fullname = '';
@@ -123,12 +110,28 @@ export default {
         validationStatus: function(validation){
             return typeof validation != "undefined" ? validation.$error:false;
         },
-        submit: function(){
+        async submit(){
             this.$v.$touch();
             if (this.$v.$pendding || this.$v.$error) return;
-            alert('Data Submit');
-            this.$v.$reset();
-            this.resetData();
+            try {
+                const credentials = {
+                email: this.email,
+                password: this.password,
+                };
+                const response = await AuthService.signUp(credentials);
+                console.log(response);
+                const token = response.token;
+                const user = {
+                    username: this.email,
+                    id: response.id
+                };
+                this.$v.$reset();
+                this.resetData();
+                this.$store.dispatch('login', { token, user });
+                this.$router.push('/about');
+            } catch (error) {
+                this.msg = error.response.data.error;
+            }
         },
     }
 }
