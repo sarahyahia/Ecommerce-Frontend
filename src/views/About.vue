@@ -1,10 +1,10 @@
 // src/views/Home.vue
 
 <template>
-  <div>
+  <div class="m-5 p-3">
     <h1>Hi {{ username }}</h1>
-    <p>{{ secretMessage }}</p>
-    <input type="button" value="Logout" @click="logout" />
+    <p>your token is {{ secretMessage }}</p>
+    <input type="button" class="btn btn-danger" value="Logout" @click="logout" />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
   },
   async created() {
     if (!this.$store.getters.isLoggedIn) {
-      this.$router.push('/login');
+      this.$router.push('/signin');
     }
 
     this.username = this.$store.getters.getUser.username;

@@ -53,6 +53,9 @@ export default new Vuex.Store({
         commit('SET_USER', user);
         // set auth header
         Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    },
+    logout: (context)=>{
+      context.commit('RESET');
     }
  }
 });

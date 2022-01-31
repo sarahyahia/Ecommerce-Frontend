@@ -25,10 +25,6 @@
             </div>
             <div class="col-12 form-group">
                 <label class="col-form-label col-form-label-lg">Country <span class="text-danger">*</span></label>
-                <!-- <select class="form-control form-control-lg" v-model.trim="$v.country.$model" :class="{'is-invalid':validationStatus($v.country)}">
-                    <option value="">Select Country</option>
-                    <option :value="c.iso" :key="c.iso" v-for="c in countryList">{{ c.country }}</option>
-                </select> -->
                 <v-autocomplete
                     v-model.trim="$v.country.$model"
                     :items="countryList.map(a => a.country)"
@@ -88,7 +84,9 @@ export default {
         password:{required, minLength: minLength(6), maxLength: maxLength(18)}
     },
     created: function() {
-        // alert('created')
+        if (this.$store.getters.isLoggedIn) {
+            this.$router.push('/about');
+        }
         var v = this;
         v.$http.get(`http://localhost:4600/countries`)
         .then(function(resp) {

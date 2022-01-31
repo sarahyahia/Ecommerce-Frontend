@@ -71,6 +71,11 @@
             checkbox: false,
             msg: '',
         }),
+        created() {
+            if (this.$store.getters.isLoggedIn) {
+                this.$router.push('/about');
+            }
+        },
         computed : {
             usernameErrors () {
                 const errors = []
@@ -117,8 +122,7 @@
                     console.log(error.response.data.error);
                     this.msg = error.response.data.error;
                 }
-                this.clear();
-                alert('Data Submit');
+                // this.clear();
             },
             clear () {
                 this.$v.$reset()
