@@ -2,12 +2,15 @@
 
 import axios from 'axios';
 
-const url = 'https://reqres.in/api/';
+const url = 'http://127.0.0.1:8000/api/auth/';
+const headers = {
+  'Content-Type': 'application/json',
+};
 
 export default {
   login(credentials) {
     return axios
-      .post(url + 'login', credentials)
+      .post(url + 'login', credentials, {headers: headers})
       .then(response => response.data);
   },
   signUp(credentials) {

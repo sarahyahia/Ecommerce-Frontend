@@ -11,9 +11,19 @@
                 dark
             >{{ msg }}</v-alert>
             <div class="col-12 form-group">
-                <label class="col-form-label col-form-label-lg">Full Name <span class="text-danger">*</span></label>
-                <input type="text" v-model.trim="$v.fullname.$model" :class="{'is-invalid': validationStatus($v.fullname)}" class="form-control form-control-lg">
-                <div v-if="!$v.fullname.required" class="invalid-feedback">The full name field is required.</div>
+                <label class="col-form-label col-form-label-lg">First Name <span class="text-danger">*</span></label>
+                <input type="text" v-model.trim="$v.firstName.$model" :class="{'is-invalid': validationStatus($v.firstName)}" class="form-control form-control-lg">
+                <div v-if="!$v.firstName.required" class="invalid-feedback">The fist name field is required.</div>
+            </div>
+            <div class="col-12 form-group">
+                <label class="col-form-label col-form-label-lg">Last Name <span class="text-danger">*</span></label>
+                <input type="text" v-model.trim="$v.lastName.$model" :class="{'is-invalid': validationStatus($v.lastName)}" class="form-control form-control-lg">
+                <div v-if="!$v.lastName.required" class="invalid-feedback">The last name field is required.</div>
+            </div>
+            <div class="col-12 form-group">
+                <label class="col-form-label col-form-label-lg">Username <span class="text-danger">*</span></label>
+                <input type="text" v-model.trim="$v.username.$model" :class="{'is-invalid': validationStatus($v.username)}" class="form-control form-control-lg">
+                <div v-if="!$v.username.required" class="invalid-feedback">The username field is required.</div>
             </div>
             <div class="col-12 form-group">
                 <label class="col-form-label col-form-label-lg">Email <span class="text-danger">*</span></label>
@@ -23,7 +33,7 @@
 
             
             </div>
-            <div class="col-12 form-group">
+            <!-- <div class="col-12 form-group">
                 <label class="col-form-label col-form-label-lg">Country <span class="text-danger">*</span></label>
                 <v-autocomplete
                     v-model.trim="$v.country.$model"
@@ -33,12 +43,12 @@
                     outlined
                 ></v-autocomplete>
                 <div v-if="!$v.country.required" class="invalid-feedback">The country field is required.</div>
-            </div>
-            <div class="col-12 form-group">
+            </div> -->
+            <!-- <div class="col-12 form-group">
                 <label class="col-form-label col-form-label-lg">Birth Date <span class="text-danger">*</span></label>
                 <input type="date" class="form-control form-control-lg" v-model.trim="$v.birthDate.$model" :class="{'is-invalid':validationStatus($v.birthDate)}">
                 <div v-if="!$v.birthDate.required" class="invalid-feedback">The birth date field is required.</div>
-            </div>
+            </div> -->
             <div class="col-12 form-group">
                 <label class="col-form-label col-form-label-lg">Password <span class="text-danger">*</span></label>
                 <input type="password" v-model.trim="password" :class="{'is-invalid':validationStatus($v.password)}" class="form-control form-control-lg">
@@ -47,9 +57,9 @@
                 <div v-if="!$v.password.maxLength" class="invalid-feedback">You must not have greater than {{ $v.password.$params.maxLength.min }} characters.</div>
             </div>
             <div class="col-12 form-group my-3">
-                <input class="form-check-input " v-model.trim="remeberMe" type="checkbox" value="" id="defaultCheck1">
+                <input class="form-check-input " v-model.trim="agreeTerms" type="checkbox" value="" id="defaultCheck1">
                 <label class="form-check-label mx-3" for="defaultCheck1">
-                    Remember me!
+                    agree  to our terms of service!
                 </label>                
             </div>
             <div class="col-12 form-group text-center">
@@ -65,45 +75,51 @@ export default {
     name: 'SignupForm',
     data: function() {
         return {
-            fullname: '', 
+            firstName: '',
+            lastName: '', 
+            username: '', 
             email: '', 
-            country: '', 
-            birthDate: '',
+            // country: '', 
+            // birthDate: '',
             password: '',
-            remeberMe: '',
-            countryList: [],
-            value: null,
+            agreeTerms: '',
+            // countryList: [],
+            // value: null,
             msg: '',
         }
     },
     validations: {
-        fullname: {required},
+        firstName: {required},
+        lastName: {required},
+        username: {required},
         email:{required,email},
-        country:{required},
-        birthDate:{required},
+        // country:{required},
+        // birthDate:{required},
         password:{required, minLength: minLength(6), maxLength: maxLength(18)}
     },
     created: function() {
         if (this.$store.getters.isLoggedIn) {
             this.$router.push('/about');
         }
-        var v = this;
-        v.$http.get(`http://localhost:4600/countries`)
-        .then(function(resp) {
-            v.countryList = resp.data;
-        })
-        .catch(function(err) {
-            console.log(err)
-        });
+        // var v = this;
+        // v.$http.get(`http://localhost:4600/countries`)
+        // .then(function(resp) {
+        //     v.countryList = resp.data;
+        // })
+        // .catch(function(err) {
+        //     console.log(err)
+        // });
     },
     methods: {
        resetData: function() {
-            this.fullname = '';
+            this.firstName = '';
+            this.lastName = '';
+            this.username = '';
             this.email = '';
-            this.country = '';
-            this.birthDate ='';
+            // this.country = '';
+            // this.birthDate ='';
             this.password = '';
-            this.remeberMe = '';
+            this.agreeTerms = '';
         },
         validationStatus: function(validation){
             return typeof validation != "undefined" ? validation.$error:false;
@@ -113,16 +129,16 @@ export default {
             if (this.$v.$pendding || this.$v.$error) return;
             try {
                 const credentials = {
-                email: this.email,
-                password: this.password,
+                    first_name: this.firstName,
+                    last_name: this.lastName,
+                    username: this.username,
+                    email: this.email,
+                    password: this.password,
                 };
                 const response = await AuthService.signUp(credentials);
                 console.log(response);
-                const token = response.token;
-                const user = {
-                    username: this.email,
-                    id: response.id
-                };
+                const token = 'dfsj' //response.token;
+                const user = response.user;
                 this.$v.$reset();
                 this.resetData();
                 this.$store.dispatch('login', { token, user });

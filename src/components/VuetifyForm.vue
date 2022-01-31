@@ -101,26 +101,23 @@
             async submit () {
                 // this.$v.$touch()
                 // if (this.$v.$pendding || this.$v.$error) return;
-                console.log('dsf');
                 try {
-                    console.log('response');
-
+                    
                     const credentials ={
-                        email: this.username,
+                        username: this.username,
                         password: this.password
                     };
                     const response = await AuthService.login(credentials);
-                    console.log(response);
+                        console.log('response');
+                    console.log(response,'res');
                     // this.msg = response.msg;
-                    const token = response.token;
-                    const user = {
-                        username: this.username,
-                    };
+                    const token = 'djf'//response.token;
+                    const user = response.user;
                     this.$store.dispatch('login', { token, user });
                     this.$router.push('/about');
                 }catch (error) {
-                    console.log(error.response.data.error);
-                    this.msg = error.response.data.error;
+                    console.log(error);
+                    // this.msg = error.response.data.error;
                 }
                 // this.clear();
             },
