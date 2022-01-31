@@ -12,6 +12,7 @@ const getDefaultState = () => {
       token: '',
       user: {},
       count: 0,
+      msg:'',
     };
   };
 
@@ -29,7 +30,10 @@ export default new Vuex.Store({
   },
  mutations: {
     changeUsernameValue(state, username) {
-        state.user.username = username
+      state.user.username = username
+    },
+    changeMsgValue(state, msg) {
+      state.msg = msg
     },
     increment (state) {
         state.count++
@@ -48,14 +52,16 @@ export default new Vuex.Store({
     increment (context) {
       context.commit('increment')
     },
-    login: ({ commit }, { token, user }) => {
+    login: ({ commit }, { token, user, msg }) => {
         commit('SET_TOKEN', token);
         commit('SET_USER', user);
+        commit('changeMsgValue', msg)
         // set auth header
         Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     },
-    logout: (context)=>{
-      context.commit('RESET');
+    logout: ({ commit }, { msg })=>{
+      commit('RESET');
+      commit('changeMsgValue', msg)
     }
  }
 });

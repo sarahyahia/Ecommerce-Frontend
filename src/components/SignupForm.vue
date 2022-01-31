@@ -137,13 +137,14 @@ export default {
                 };
                 const response = await AuthService.signUp(credentials);
                 console.log(response);
-                const token = 'dfsj' //response.token;
+                const token = response.token;
                 const user = response.user;
                 this.$v.$reset();
                 this.resetData();
                 this.$store.dispatch('login', { token, user });
                 this.$router.push('/about');
             } catch (error) {
+                console.log(error.response);
                 this.msg = error.response.data.error;
             }
         },

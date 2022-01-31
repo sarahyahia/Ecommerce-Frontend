@@ -18,7 +18,7 @@ export default {
       .post(url + 'register', credentials)
       .then(response => response.data);
   },
-  getSecretContent() {
-    return axios.get(url + 'secret-route/').then(response => response.data);
+  logout(token) {
+    return axios.get(url + 'logout', {headers:{'Authorization': `token ${token}`}}).then(response => response.data);
   }
 };

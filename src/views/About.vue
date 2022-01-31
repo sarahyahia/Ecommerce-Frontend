@@ -10,6 +10,8 @@
 
 <script>
 
+import AuthService from '@/services/AuthService.js';
+
 export default {
   data() {
     return {
@@ -27,8 +29,10 @@ export default {
     this.secretMessage = this.$store.getters.isLoggedIn;
   },
   methods: {
-    logout() {
-      this.$store.dispatch('logout');
+    async logout() {
+      const response = await AuthService.logout(this.$store.getters.isLoggedIn);
+      // this.$store.dispatch('changeMsgValue', response.msg)
+      this.$store.dispatch('logout', response);
       this.$router.push('/signin');
     }
   }

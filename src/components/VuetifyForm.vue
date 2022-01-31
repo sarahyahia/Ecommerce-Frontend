@@ -12,6 +12,10 @@
                         color="red lighten-2"
                         dark
                     >{{ msg }}</v-alert>
+                    <v-alert
+                        v-if='this.$store.state.msg'
+                        type="success"
+                    >{{this.$store.state.msg}}</v-alert>
                     <v-text-field 
                         label="Username"
                         v-model="username"
@@ -31,14 +35,14 @@
                         :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                         @click:append="showPassword = !showPassword"
                     />
-                    <v-checkbox
+                    <!-- <v-checkbox
                         v-model="checkbox"
                         :error-messages="checkboxErrors"
                         label="Do you agree?"
                         required
                         @change="$v.checkbox.$touch()"
                         @blur="$v.checkbox.$touch()"
-                    ></v-checkbox>
+                    ></v-checkbox> -->
                 </v-form>
             </v-card-text>
             <v-divider></v-divider>
@@ -58,17 +62,17 @@
         validations: {
             username: {required, maxLength:maxLength(10)},
             password: {required},
-            checkbox: {
-                checked (val) {
-                return val
-                }
-            }
+            // checkbox: {
+            //     checked (val) {
+            //     return val
+            //     }
+            // }
         },
         data: ()=>({
             username:'',
             password:'',
             showPassword : false,
-            checkbox: false,
+            // checkbox: false,
             msg: '',
         }),
         created() {
@@ -90,17 +94,17 @@
                 !this.$v.password.required && errors.push('Password is required.')
                 return errors
             },
-            checkboxErrors () {
-                const errors = []
-                if (!this.$v.checkbox.$dirty) return errors
-                !this.$v.checkbox.checked && errors.push('You must agree to continue!')
-                return errors
-                    },
+            // checkboxErrors () {
+            //     const errors = []
+            //     if (!this.$v.checkbox.$dirty) return errors
+            //     !this.$v.checkbox.checked && errors.push('You must agree to continue!')
+            //     return errors
+            //         },
             },
         methods: {
             async submit () {
-                // this.$v.$touch()
-                // if (this.$v.$pendding || this.$v.$error) return;
+                this.$v.$touch()
+                if (this.$v.$pendding || this.$v.$error) return;
                 try {
                     
                     const credentials ={
@@ -108,58 +112,24 @@
                         password: this.password
                     };
                     const response = await AuthService.login(credentials);
-                        console.log('response');
-                    console.log(response,'res');
-                    // this.msg = response.msg;
-                    const token = 'djf'//response.token;
+                    const msg = response.msg;
+                    const token = response.token;
                     const user = response.user;
-                    this.$store.dispatch('login', { token, user });
+                    this.$store.dispatch('login', { token, user, msg });
                     this.$router.push('/about');
                 }catch (error) {
-                    console.log(error);
-                    // this.msg = error.response.data.error;
+                    this.msg = error.response.data.error;
                 }
-                // this.clear();
             },
             clear () {
                 this.$v.$reset()
                 this.username = ''
                 this.password = ''
                 this.showPassword = false
-                this.checkbox = false
+                // this.checkbox = false
             },
-            // async login () {
-            //     try {
-            //         const credentials ={
-            //             email: this.username,
-            //             password: this.password
-            //         };
-            //         const response = await AuthService.login(credentials);
-            //         this.msg = response.token;
-            //         console.log(response);
-            //     }catch (error) {
-            //         this.msg = error.error;
-            //     }
-            // }
+            
 
         },
-        // beforeCreate(){
-        //     alert('beforeCreate');
-        // },
-        // created(){
-        //     alert('created');
-        // },
-        // beforeMount(){
-        //     alert('beforeMount');
-        // },
-        // mounted(){
-        //     alert('mounted');
-        // },
-        // beforeUpdate(){
-        //     alert('beforeUpdate');
-        // },
-        // updated(){
-        //     alert('updated');
-        // }
         }
 </script>
