@@ -29,5 +29,20 @@ export default {
       .get(productUrl+'latestproduct/')
       .then(response => response.data)
 
+  },
+  productsList(){
+    return axios
+      .get(productUrl+'products/')
+      .then(response => response.data)
+  },
+  productDetail(category_slug, product_slug){
+    return axios
+      .get(productUrl+`products/${category_slug}/${product_slug}/`)
+      .then(response => response.data)
+  },
+  searchProduct(query){
+    return axios
+      .get(productUrl+'products/search/', {'query':query})
+      .then(response => response.data)
   }
 };

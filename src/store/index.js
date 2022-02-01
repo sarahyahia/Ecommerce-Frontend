@@ -14,6 +14,8 @@ const getDefaultState = () => {
       count: 0,
       msg:'',
       latestProducts: [],
+      products: [],
+      product:{},
       isLoading:false,
     };
   };
@@ -32,6 +34,12 @@ export default new Vuex.Store({
     getLatestProducts: state => {
       return state.latestProducts;
     },
+    getProducts: state => {
+      return state.products;
+    },
+    getProduct: state => {
+      return state.product;
+    }
   },
  mutations: {
     changeUsernameValue(state, username) {
@@ -55,6 +63,12 @@ export default new Vuex.Store({
     SET_LATEST_PRODUCTS(state, latestProducts){
       state.latestProducts = latestProducts
     },
+    SET_PRODUCTS(state, products){
+      state.products = products
+    },
+    SET_PRODUCT(state, product){
+      state.product = product
+    },
     setIsLoading: state=>{
       state.isLoading == true?false:true ;
     }
@@ -73,6 +87,9 @@ export default new Vuex.Store({
     logout: ({ commit }, { msg })=>{
       commit('RESET');
       commit('changeMsgValue', msg)
+    },
+    search: ({ commit },{products})=>{
+      commit('SET_PRODUCTS',products);
     }
  }
 });

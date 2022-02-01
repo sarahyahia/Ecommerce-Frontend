@@ -5,7 +5,8 @@ import SignupForm from '../views/SignupForm.vue'
 import Computed from '../views/Computed.vue'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-
+import Product from '../views/Product.vue'
+import Category from '../views/Category.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -33,6 +34,16 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/:category_slug/:product_slug',
+    name: 'Product',
+    component: Product
+  },
+  {
+    path: '/:category_slug',
+    name: 'Category',
+    component: Category
   }
 ]
 
