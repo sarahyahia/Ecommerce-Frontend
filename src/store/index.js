@@ -13,6 +13,8 @@ const getDefaultState = () => {
       user: {},
       count: 0,
       msg:'',
+      latestProducts: [],
+      isLoading:false,
     };
   };
 
@@ -26,7 +28,10 @@ export default new Vuex.Store({
     },
     getUser: state => {
       return state.user;
-    }
+    },
+    getLatestProducts: state => {
+      return state.latestProducts;
+    },
   },
  mutations: {
     changeUsernameValue(state, username) {
@@ -47,6 +52,12 @@ export default new Vuex.Store({
     RESET: state => {
         Object.assign(state, getDefaultState());
     },
+    SET_LATEST_PRODUCTS(state, latestProducts){
+      state.latestProducts = latestProducts
+    },
+    setIsLoading: state=>{
+      state.isLoading == true?false:true ;
+    }
  },
  actions: {
     increment (context) {
@@ -57,7 +68,7 @@ export default new Vuex.Store({
         commit('SET_USER', user);
         commit('changeMsgValue', msg)
         // set auth header
-        Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        Axios.defaults.headers.common['Authorization'] = `token ${token}`;
     },
     logout: ({ commit }, { msg })=>{
       commit('RESET');
