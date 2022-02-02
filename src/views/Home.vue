@@ -13,146 +13,34 @@
 
      <v-container class="mt-3">
        <div class="row">
+         <v-item-group>
+            <v-subheader>Categories:</v-subheader>
+            <v-item
+              v-for="category in this.$store.getters.getCategories"
+              :key="category.id"
+              v-slot="{ active, toggle }"
+            >
+            <router-link :to="category.get_absolute_url" class="btn">
+              <v-chip
+                active-class="warning white--text"
+                :input-value="active"
+                @click="toggle"
+              >
+                {{ category.title }}
+              </v-chip>
+            </router-link>
+            </v-item>
+          </v-item-group>
+       </div>
+       <div class="row">
           <h3 class="mt-2 col col-12"><strong>Latest Products <i class="fas fa-plus-square"></i></strong></h3>
           <div v-for="product in this.$store.getters.getLatestProducts" :key="product.id" class="col-md-3 col-6">
-            <v-card
-              height="95%"
-              :loading="loading"
-              class="mx-auto my-12 overflow-hidden"
-              max-width="374"
-            >
-              <template slot="progress">
-                <v-progress-linear
-                  color="deep-purple"
-                  height="10"
-                  indeterminate
-                ></v-progress-linear>
-              </template>
-
-              <v-img
-                height="50%"
-                :src="product.get_image"
-              ></v-img>
-
-              <v-card-title class="overflow-hidden">{{ product.title }}</v-card-title>
-
-              <v-card-text>
-                <v-row
-                  align="center"
-                  class="mx-0"
-                >
-                </v-row>
-
-                <div class="my-4 text-subtitle-1">
-                  {{ product.price }}LE • 
-                </div>
-
-                <!-- <div>{{ product.description }}</div> -->
-              </v-card-text>
-
-              <v-divider class="mx-4"></v-divider>
-              <v-card-text>
-                <v-chip-group
-                  v-model="selection"
-                  active-class="deep-purple accent-2 white--text"
-                  column
-                >
-                  <v-chip>{{ product.quantity_available }} piece</v-chip>
-                  <v-chip>{{ product.status}}</v-chip>
-                </v-chip-group>
-              </v-card-text>
-
-              <v-card-actions class="pl-3">
-                <v-btn
-                  v-if="product.quantity_available"
-                  color="deep-purple darken-2"
-                  class="btn btn-warning"
-                  text
-                  @click="reserve"
-                >
-                  <i class="fas fa-cart-plus"></i>
-                </v-btn>
-                <router-link :to="product.get_absolute_url" class="btn"><v-btn
-                  color="deep-purple darken-2"
-                  class="btn btn-warning"
-                  text
-                  @click="reserve"
-                >
-                  <i class="fas fa-info-circle"></i>
-                </v-btn></router-link>
-              </v-card-actions>
-            </v-card>
+            <ProductBox :product="product" />
           </div>
           <v-divider class="mt-3"></v-divider>
           <h3 class="mt-2 col col-12"><strong>Our Products <i class="fas fa-ad"></i></strong></h3>
           <div v-for="product in this.$store.getters.getProducts" :key="product.id" class="col-md-3 col-6">
-            <v-card
-              height="95%"
-              :loading="loading"
-              class="mx-auto my-12 overflow-hidden"
-              max-width="374"
-            >
-              <template slot="progress">
-                <v-progress-linear
-                  color="deep-purple"
-                  height="10"
-                  indeterminate
-                ></v-progress-linear>
-              </template>
-
-              <v-img
-                height="50%"
-                :src="product.get_image"
-              ></v-img>
-
-              <v-card-title class="overflow-hidden">{{ product.title }}</v-card-title>
-
-              <v-card-text>
-                <v-row
-                  align="center"
-                  class="mx-0"
-                >
-                </v-row>
-
-                <div class="my-4 text-subtitle-1">
-                  {{ product.price }}LE • 
-                </div>
-
-                <!-- <div>{{ product.description }}</div> -->
-              </v-card-text>
-
-              <v-divider class="mx-4"></v-divider>
-              <v-card-text>
-                <v-chip-group
-                  v-model="selection"
-                  active-class="deep-purple accent-2 white--text"
-                  column
-                >
-                  <v-chip>{{ product.quantity_available }} piece</v-chip>
-                  <v-chip>{{ product.status}}</v-chip>
-                </v-chip-group>
-              </v-card-text>
-
-              <v-card-actions class="pl-3">
-                <v-btn
-                  v-if="product.quantity_available"
-                  color="deep-purple darken-2"
-                  class="btn btn-warning"
-                  text
-                  @click="reserve"
-                >
-                  <i class="fas fa-cart-plus"></i>
-                </v-btn>
-                <router-link :to="product.get_absolute_url" class="btn"><v-btn
-                  color="deep-purple darken-2"
-                  class="btn btn-warning"
-                  text
-                  @click="reserve"
-                >
-                  <i class="fas fa-info-circle"></i>
-                </v-btn></router-link>
-              </v-card-actions>
-            </v-card>
+            <ProductBox :product="product" />
           </div>
         </div>
       </v-container>
@@ -161,11 +49,11 @@
 
 <script>
 import AuthService from '@/services/AuthService.js';
-
+import ProductBox from '@/components/ProductBox.vue';
 export default {
   name: 'Home',
   components: {
-    
+    ProductBox
   },
    data () {
       return {
@@ -205,11 +93,18 @@ export default {
         const response = await AuthService.productsList();
         this.$store.commit('setIsLoading', false);
         this.$store.commit('SET_PRODUCTS', response)
+      },
+      async getCategories() {
+        this.$store.commit('setIsLoading',true)
+        const response = await AuthService.categoryList();
+        this.$store.commit('setIsLoading', false);
+        this.$store.commit('SET_CATEGORIES', response)
       }
     },
     mounted: function(){
       this.getLatestProducts();
       this.getProducts();
+      this.getCategories();
     }
 }
 </script>

@@ -17,6 +17,8 @@ const getDefaultState = () => {
       products: [],
       product:{},
       isLoading:false,
+      categories:[],
+      category:{},
     };
   };
 
@@ -39,6 +41,12 @@ export default new Vuex.Store({
     },
     getProduct: state => {
       return state.product;
+    },
+    getCategories: state => {
+      return state.categories
+    },
+    getCategory: state => {
+      return state.category
     }
   },
  mutations: {
@@ -71,6 +79,12 @@ export default new Vuex.Store({
     },
     setIsLoading: state=>{
       state.isLoading == true?false:true ;
+    },
+    SET_CATEGORIES(state,categories) {
+      state.categories=categories;
+    },
+    SET_CATEGORY(state,category) {
+      state.category=category;
     }
  },
  actions: {

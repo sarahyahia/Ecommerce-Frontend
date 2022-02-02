@@ -66,73 +66,7 @@
     <v-row>
           <h5 class="mt-5 col col-12"><strong>Latest Products <i class="fas fa-plus-square"></i></strong></h5>
           <div v-for="product in this.$store.getters.getLatestProducts" :key="product.id" class="col-md-3 col-6">
-            <v-card
-              height="95%"
-              :loading="loading"
-              class="mx-auto my-12 overflow-hidden"
-              max-width="374"
-            >
-              <template slot="progress">
-                <v-progress-linear
-                  color="deep-purple"
-                  height="10"
-                  indeterminate
-                ></v-progress-linear>
-              </template>
-
-              <v-img
-                height="50%"
-                :src="product.get_image"
-              ></v-img>
-
-              <v-card-title class="overflow-hidden">{{ product.title }}</v-card-title>
-
-              <v-card-text>
-                <v-row
-                  align="center"
-                  class="mx-0"
-                >
-                </v-row>
-
-                <div class="my-4 text-subtitle-1">
-                  {{ product.price }}LE • 
-                </div>
-
-                <!-- <div>{{ product.description }}</div> -->
-              </v-card-text>
-
-              <v-divider class="mx-4"></v-divider>
-              <v-card-text>
-                <v-chip-group
-                  v-model="selection"
-                  active-class="deep-purple accent-2 white--text"
-                  column
-                >
-                  <v-chip>{{ product.quantity_available }} piece</v-chip>
-                  <v-chip>{{ product.status}}</v-chip>
-                </v-chip-group>
-              </v-card-text>
-
-              <v-card-actions class="pl-3">
-                <v-btn
-                  v-if="product.quantity_available"
-                  color="deep-purple darken-2"
-                  class="btn btn-warning"
-                  text
-                  @click="reserve"
-                >
-                  <i class="fas fa-cart-plus"></i>
-                </v-btn>
-                <router-link :to="product.get_absolute_url" class="btn"><v-btn
-                  color="deep-purple darken-2"
-                  class="btn btn-warning"
-                  text
-                  @click="getProduct"
-                >
-                  <i class="fas fa-info-circle"></i>
-                </v-btn></router-link>
-              </v-card-actions>
-            </v-card>
+             <ProductBox :product="product" />
           </div>
     </v-row>
     </v-container>
@@ -140,30 +74,40 @@
 </template>
 
 <script>
+
+import ProductBox from "@/components/ProductBox"
 import AuthService from '@/services/AuthService.js';
 
 export default({
+    name:'Product',
+    components: {
+      ProductBox
+    },
     data() {
     return{
-        product: this.$store.state.product
+        product:{}
         
     }},
     methods:{
         async getProduct() {
-        this.$store.commit('setIsLoading')
-        const category_slug = this.$route.params.category_slug
-        const product_slug = this.$route.params.product_slug
-        const response = await AuthService.productDetail(category_slug, product_slug);
-        this.$store.commit('setIsLoading');
-        this.$store.commit('SET_PRODUCT',response)
-
+          this.$store.commit('setIsLoading')
+          const category_slug = this.$route.params.category_slug
+          const product_slug = this.$route.params.product_slug
+          const response = await AuthService.productDetail(category_slug, product_slug);
+          this.$store.commit('setIsLoading');
+          this.$store.commit('SET_PRODUCT',response)
+          this.product = this.$store.getters.getProduct;
       },
     },
-    created(){
+    mounted(){
         this.getProduct();
     },
-    computed() {
-        this.product = this.$store.getters.getProduct();
-    }
+    watch: {
+        $route(to) {
+            if (to.name === 'Product') {
+                this.getProduct()
+            }
+        }
+    },
 })
 </script>
