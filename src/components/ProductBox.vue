@@ -1,7 +1,7 @@
 <template>
     <v-card
         height="95%"
-        :loading="loading"
+        :loading="this.$store.getters.isLoading"
         class="mx-auto my-12 overflow-hidden"
         max-width="374"
     >
@@ -35,7 +35,6 @@
         <v-divider class="mx-4"></v-divider>
         <v-card-text>
             <v-chip-group
-                v-model="selection"
                 active-class="deep-purple accent-2 white--text"
                 column
             >
@@ -50,7 +49,6 @@
                 color="deep-purple darken-2"
                 class="btn btn-warning"
                 text
-                @click="reserve"
             >
                 <i class="fas fa-cart-plus"></i>
             </v-btn>
@@ -59,7 +57,6 @@
                     color="deep-purple darken-2"
                     class="btn btn-warning"
                     text
-                    @click="reserve"
                 >
                     <i class="fas fa-info-circle"></i>
                 </v-btn>
