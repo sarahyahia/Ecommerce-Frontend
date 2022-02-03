@@ -46,15 +46,34 @@
                 <strong>Status:</strong> {{product.status}}
             </p>
             <div class="text-danger">{{product.quantity_available}} left in the stock</div>
+            <v-text-field label="quantity" type="number" min="1" :max="product.quantity_available"  v-model="quantity"></v-text-field>
             <v-btn
                   v-if="product.quantity_available"
                   color="deep-purple darken-2"
                   class="btn btn-warning"
                   text
-                  @click="reserve"
+                   @click="addToCart()"
                 >
                   Add to Cart<i class="fas fa-cart-plus"></i>
                 </v-btn>
+                <div class="text-center ma-2">
+                    <v-snackbar
+                    v-model="snackbar"
+                    :timeout="timeout"
+                    >
+                    {{ text }}
+                    <template v-slot:action="{ attrs }">
+                        <v-btn
+                        color="pink"
+                        text
+                        v-bind="attrs"
+                        @click="snackbar = false"
+                        >
+                        Close
+                        </v-btn>
+                    </template>
+                    </v-snackbar>
+                </div>
             </v-card-text>
             <v-card-actions>
             </v-card-actions>
@@ -85,8 +104,11 @@ export default({
     },
     data() {
     return{
-        product:{}
-        
+        product:{},
+        snackbar: false,
+        text: `Added to your cart successfully`,
+        timeout: 2000,
+        quantity: 1
     }},
     methods:{
         async getProduct() {
@@ -98,6 +120,17 @@ export default({
           this.$store.commit('SET_PRODUCT',response)
           this.product = this.$store.getters.getProduct;
       },
+      addToCart() {
+            this.snackbar = true;
+            if (isNaN(this.quantity) || this.quantity < 1) {
+                this.quantity = 1
+            }
+            const item = {
+                product: this.product,
+                quantity: this.quantity
+            }
+            this.$store.commit('addToCart', item)
+        }
     },
     mounted(){
         this.getProduct();

@@ -26,6 +26,17 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items  style="background-color:#eee" class="hidden-xs-only">
+         <form method="get" action="/#/search">
+          <v-text-field
+            hide-details
+            single-line
+            prepend-icon="mdi-magnify"
+            class="mt-3 mr-3"
+            name="query"
+            placeholder="search for a product"
+          >
+          </v-text-field>
+         </form>
         <v-btn
           text
           v-for="item in menuItems"
@@ -53,13 +64,13 @@ export default {
   },
   data(){
     return {
-      appTitle: 'Vue App',
+      appTitle: 'Store App',
       sidebar: false,
       menuItems: [
           { title: 'Home', path: '/', icon: 'home' },
           { title: 'SignUp', path: '/signup', icon: 'face' },
           { title: 'Sign In', path: '/signin', icon: 'lock_open' },
-          { title: 'Computed', path: '/computed', icon: '' }
+          { title: 'Cart', path: '/cart', icon: 'mdi-cart' },
      ]
     }
   },

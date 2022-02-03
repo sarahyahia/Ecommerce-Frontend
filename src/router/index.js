@@ -7,9 +7,17 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import Product from '../views/Product.vue'
 import Category from '../views/Category.vue'
+import Search from '../views/Search.vue'
+import Cart from '../views/Cart.vue'
+import Checkout from '../views/Checkout.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/search',
+    name: 'Search',
+    component: Search
+  },
   {
     path: '/',
     name: 'Home',
@@ -31,6 +39,19 @@ const routes = [
     component: Computed
   },
   {
+    path: '/cart',
+    name: 'Cart',
+    component: Cart
+  },
+  {
+    path: '/cart/checkout',
+    name: 'Checkout',
+    component: Checkout,
+    meta: {
+        requireLogin: true
+    }
+  },
+  {
     path: '/about',
     name: 'About',
     component: About
@@ -44,7 +65,7 @@ const routes = [
     path: '/:category_slug/',
     name: 'Category',
     component: Category
-  }
+  },
 ]
 
 const router = new VueRouter({

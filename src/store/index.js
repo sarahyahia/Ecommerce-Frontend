@@ -19,6 +19,9 @@ const getDefaultState = () => {
       isLoading:false,
       categories:[],
       category:{},
+      cart: {
+        items: [],
+      },
     };
   };
 
@@ -47,7 +50,10 @@ export default new Vuex.Store({
     },
     getCategory: state => {
       return state.category
-    }
+    },
+    getCart: state => {
+      return state.cart
+    }    
   },
  mutations: {
     changeUsernameValue(state, username) {
@@ -85,7 +91,27 @@ export default new Vuex.Store({
     },
     SET_CATEGORY(state,category) {
       state.category=category;
-    }
+    },
+    addToCart(state, item) {
+      const exists = state.cart.items.filter(i => i.product.id === item.product.id)
+      if (exists.length) {
+        exists[0].quantity = parseInt(exists[0].quantity) + parseInt(item.quantity)
+      } else {
+        state.cart.items.push(item)
+      }
+
+      localStorage.setItem('cart', JSON.stringify(state.cart))
+    },
+    removeFromCart(state, item) {
+      const exists = state.cart.items.filter(function(ele){ 
+        return ele != item; })
+      state.cart.items = exists      
+    },
+    clearCart(state) {
+      state.cart = { items: [] }
+
+      localStorage.setItem('cart', JSON.stringify(state.cart))
+    },
  },
  actions: {
     increment (context) {

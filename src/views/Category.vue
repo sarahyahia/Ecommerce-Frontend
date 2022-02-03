@@ -22,7 +22,7 @@
           </v-item-group>
         </v-row>
             <v-row>
-                <h2>{{ category.title }}</h2>
+                <h2 class="text-left">{{ category.title }}</h2>
             </v-row>
             <v-row>
                 <div class="row h-4 m-5" v-if="!category.products.length" > No Items in this category, try to search in another category.</div>

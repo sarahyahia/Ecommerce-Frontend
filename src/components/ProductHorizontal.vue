@@ -9,10 +9,13 @@
           >
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
-                <v-card-title
-                  class="text-h5"
-                  v-text="product.title"
-                ></v-card-title>
+                  <router-link :to="product.get_absolute_url" class="btn">
+                    <v-card-title
+                      class="text-h5"
+                      style="text-decoration:none"
+                      v-text="product.title"
+                    ></v-card-title>
+                  </router-link>
 
                 <v-card-actions class="m-3" color="deep-purple darken-2">
                     <strong>Price: {{product.price}}LE</strong>

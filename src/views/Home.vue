@@ -10,11 +10,10 @@
         transition="fade-transition"
       ></v-carousel-item>
     </v-carousel>
-
      <v-container class="mt-3">
        <div class="row">
          <v-item-group>
-            <v-subheader>Categories:</v-subheader>
+            <v-subheader></v-subheader>
             <v-item
               v-for="category in this.$store.getters.getCategories"
               :key="category.id"
@@ -82,16 +81,16 @@ export default {
         setTimeout(() => (this.loading = false), 2000)
       },
       async getLatestProducts() {
-        this.$store.commit('setIsLoading', true)
+        this.$store.commit('setIsLoading')
         const response = await AuthService.latestProducts();
         this.$store.commit('setIsLoading');
         this.$store.commit('SET_LATEST_PRODUCTS',response)
 
       },
       async getProducts(){
-        this.$store.commit('setIsLoading',true)
+        this.$store.commit('setIsLoading')
         const response = await AuthService.productsList();
-        this.$store.commit('setIsLoading', false);
+        this.$store.commit('setIsLoading');
         this.$store.commit('SET_PRODUCTS', response)
       },
       async getCategories() {

@@ -52,7 +52,12 @@ export default {
   },
   searchProduct(query){
     return axios
-      .get(productUrl+'products/search/', {'query':query})
+      .post(productUrl+'products/search/', {'query':query})
+      .then(response => response.data)
+  },
+  checkout(data){
+    return axios
+      .post(productUrl+'cart/checkout', data)
       .then(response => response.data)
   }
 };
