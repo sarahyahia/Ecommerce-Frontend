@@ -182,7 +182,8 @@ export default {
                 'items': items,
             }
             this.$store.commit('setIsLoading')
-            const response = await AuthService.checkout(data)
+            const token = this.$store.getters.isLoggedIn
+            const response = await AuthService.checkout(data, token)
             console.log(response)
             this.$store.commit('setIsLoading')
         }

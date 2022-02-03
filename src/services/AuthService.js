@@ -4,14 +4,15 @@ import axios from 'axios';
 
 const url = 'http://127.0.0.1:8000/api/auth/';
 const productUrl = 'http://127.0.0.1:8000/api/';
-const headers = {
-  'Content-Type': 'application/json',
-};
 
+const headers={
+  // 'Authorization': `token ${this.$store.getters.isLoggedIn}`
+};
+console.log(headers);
 export default {
   login(credentials) {
     return axios
-      .post(url + 'login', credentials, {headers: headers})
+      .post(url + 'login', credentials)
       .then(response => response.data);
   },
   signUp(credentials) {
@@ -55,9 +56,9 @@ export default {
       .post(productUrl+'products/search/', {'query':query})
       .then(response => response.data)
   },
-  checkout(data){
+  checkout(data,token){
     return axios
-      .post(productUrl+'cart/checkout', data)
+      .post(productUrl+'cart/checkout',data, {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
   }
 };
