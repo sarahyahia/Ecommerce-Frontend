@@ -28,7 +28,7 @@
                 </v-card-text>
                 <v-card-text>
                 <v-card-title v-if="this.$store.getters.getOrders.length" class="text-h4 text--primary">
-                    My Orders
+                    Orders History
                 </v-card-title>
                     <OrderHorizontal :orders="this.$store.getters.getOrders" />
                 </v-card-text>
