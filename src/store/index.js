@@ -22,6 +22,7 @@ const getDefaultState = () => {
       cart: {
         items: [],
       },
+      orders: [],
     };
   };
 
@@ -53,6 +54,9 @@ export default new Vuex.Store({
     },
     getCart: state => {
       return state.cart
+    },
+    getOrders: state => {
+      return state.orders
     }    
   },
  mutations: {
@@ -61,6 +65,7 @@ export default new Vuex.Store({
     },
     changeMsgValue(state, msg) {
       state.msg = msg
+      setTimeout(state.msg ='', 5000)
     },
     increment (state) {
         state.count++
@@ -112,6 +117,9 @@ export default new Vuex.Store({
 
       localStorage.setItem('cart', JSON.stringify(state.cart))
     },
+    SET_ORDERS(state, orders){
+      state.orders = orders
+    }
  },
  actions: {
     increment (context) {

@@ -46,7 +46,7 @@
                 <strong>Status:</strong> {{product.status}}
             </p>
             <div class="text-danger">{{product.quantity_available}} left in the stock</div>
-            <v-text-field label="quantity" type="number" min="1" :max="product.quantity_available"  v-model="quantity"></v-text-field>
+            <v-text-field label="quantity" v-if="product.quantity_available" type="number" min="1" :max="product.quantity_available"  v-model="quantity"></v-text-field>
             <v-btn
                   v-if="product.quantity_available"
                   color="deep-purple darken-2"

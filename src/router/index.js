@@ -10,6 +10,7 @@ import Category from '../views/Category.vue'
 import Search from '../views/Search.vue'
 import Cart from '../views/Cart.vue'
 import Checkout from '../views/Checkout.vue'
+import Account from '../views/Account.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -55,6 +56,11 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    component: Account
   },
   {
     path: '/:category_slug/:product_slug',

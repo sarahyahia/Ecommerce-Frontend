@@ -24,7 +24,7 @@
                 <v-card-actions class="m-3" color="deep-purple darken-2">
                     <strong>Total Price: {{item.product.price*item.quantity}}LE</strong>
                 </v-card-actions>
-                <v-card-actions class="ml-3">
+                <v-card-actions class="ml-3" v-if="flag">
                     <!-- <strong>Vendor: {{item.product.vendor}}</strong> -->
                     <button class="btn btn-warning" @click="removeFromCart(item)">Delete<v-icon>mdi-delete-forever</v-icon></button>
                 </v-card-actions>
@@ -49,7 +49,10 @@
 export default {
     
     name:'CartProduct',
-    props:{items:Array},
+    props:{
+      items:Array,
+      flag:Boolean,
+      },
     data() {
       return{
       }

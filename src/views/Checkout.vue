@@ -3,6 +3,13 @@
     <v-container>
     <v-row class="my-5 text-left">
         <h2>Checkout:</h2>
+        <v-alert
+            v-if='msg'
+            border="top"
+            color="success "
+            dark
+        >{{ msg }}</v-alert>
+        
     </v-row>
       <v-row class="mt-5">
             <table class="table table-striped ">
@@ -38,6 +45,13 @@
         <h2>Shipping Details:</h2>
         <p class="has-text-grey mb-4 ml-2">* All fields are required</p>
         <v-container class="m-3 b-2">
+            <v-alert
+            v-for="error in errors"
+            :key="error.key"
+            border="top"
+            color="red lighten-2"
+            dark
+        >{{ error }}</v-alert>
         <v-form
             ref="form"
             v-model="valid"
@@ -122,6 +136,7 @@ export default {
             zipcode: '',
             place: '',
             errors: [],
+            msg:'',
         }
     },
     mounted(){
@@ -161,31 +176,38 @@ export default {
             }
             if (!this.errors.length) {
                 this.$store.commit('setIsLoading', true)
-            }
+            
 
-            const items = []
-            for (let i = 0; i < this.cart.items.length; i++) {
-                const item = this.cart.items[i]
-                const obj = {
-                    product: item.product.id,
-                    quantity: item.quantity,
-                    price: item.product.price * item.quantity
+                const items = []
+                for (let i = 0; i < this.cart.items.length; i++) {
+                    const item = this.cart.items[i]
+                    const obj = {
+                        product: item.product.id,
+                        quantity: item.quantity,
+                        price: item.product.price * item.quantity
+                    }
+                    items.push(obj)
                 }
-                items.push(obj)
-            }
 
-            const data = {
-                'address': this.address,
-                'zipcode': this.zipcode,
-                'place': this.place,
-                'phone': this.phone,
-                'items': items,
+                const data = {
+                    'address': this.address,
+                    'zipcode': this.zipcode,
+                    'place': this.place,
+                    'phone': this.phone,
+                    'items': items,
+                }
+                this.$store.commit('setIsLoading')
+                const token = this.$store.getters.isLoggedIn
+                try{
+                const response = await AuthService.checkout(data, token)
+                this.msg = response.msg
+                this.reset()
+                this.$store.commit('clearCart')
+                }catch (error) {
+                    this.errors.push(error.response.data.error)
+                }
+                this.$store.commit('setIsLoading')
             }
-            this.$store.commit('setIsLoading')
-            const token = this.$store.getters.isLoggedIn
-            const response = await AuthService.checkout(data, token)
-            console.log(response)
-            this.$store.commit('setIsLoading')
         }
     }
 

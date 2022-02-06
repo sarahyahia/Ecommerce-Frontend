@@ -5,10 +5,6 @@ import axios from 'axios';
 const url = 'http://127.0.0.1:8000/api/auth/';
 const productUrl = 'http://127.0.0.1:8000/api/';
 
-const headers={
-  // 'Authorization': `token ${this.$store.getters.isLoggedIn}`
-};
-console.log(headers);
 export default {
   login(credentials) {
     return axios
@@ -22,6 +18,11 @@ export default {
   },
   logout(token) {
     return axios.get(url + 'logout', {headers:{'Authorization': `token ${token}`}}).then(response => response.data);
+  },
+  deactivate(token) {
+    return axios
+      .get(url + 'deactivate',  {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data);
   },
 
 
@@ -59,6 +60,11 @@ export default {
   checkout(data,token){
     return axios
       .post(productUrl+'cart/checkout',data, {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+  },
+  orderList(token){
+    return axios
+      .get(productUrl+'cart/myorders',{headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
   }
 };

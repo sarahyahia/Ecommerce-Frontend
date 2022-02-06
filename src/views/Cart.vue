@@ -6,7 +6,7 @@
             </v-row>
             <v-row>
                 <div class="row h-4 m-5" v-if="!cart.items.length" > No Items in your cart, start shopping.</div>
-                <CartProduct :items="cart.items" v-else v-on:removeFromCart="removeFromCart"/>
+                <CartProduct :items="cart.items" :flag="true" v-else v-on:removeFromCart="removeFromCart"/>
             </v-row>
             <v-row v-if="cart.items.length">
                 <strong class="m-3 ">Subtotal ({{ cartTotalLength  }} items): EGP {{cartTotalPrice.toFixed(2)}}</strong >

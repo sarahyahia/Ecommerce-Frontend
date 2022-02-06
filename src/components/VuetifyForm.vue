@@ -116,7 +116,7 @@
                     const token = response.token;
                     const user = response.user;
                     this.$store.dispatch('login', { token, user, msg });
-                    this.$router.push('/about');
+                    window.history.back()
                 }catch (error) {
                     this.msg = error.response.data.error;
                 }
