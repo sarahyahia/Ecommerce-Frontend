@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const url = 'http://127.0.0.1:8000/api/auth/';
 const productUrl = 'http://127.0.0.1:8000/api/';
+const adminUrl = 'http://127.0.0.1:8000/api/admin/'
 
 export default {
   login(credentials) {
@@ -32,9 +33,9 @@ export default {
       .then(response => response.data)
 
   },
-  productsList(){
+  productsList(page=1){
     return axios
-      .get(productUrl+'products/')
+      .get(productUrl+`products/?page=${page}`)
       .then(response => response.data)
   },
   categoryList(){
@@ -66,5 +67,44 @@ export default {
     return axios
       .get(productUrl+'cart/myorders',{headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
-  }
+  },
+
+
+
+
+
+  //admin api's
+  addCategory(data, token){
+    return axios
+      .post(adminUrl+'add-category', data, {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+  },
+  editCategory(data, token, categorySlug){
+    return axios
+      .post(adminUrl+`edit-category/${categorySlug}/`, data, {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+  },
+  deleteCategory( token, categorySlug){
+    return axios
+      .get(adminUrl+`delete-category/${categorySlug}/`, {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+  },
+
+
+  addProduct(data, token){
+    return axios
+      .post(adminUrl+'add-product', data, {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+  },
+  editProduct(data, token, id){
+    return axios
+      .post(adminUrl+`edit-product/${id}`, data, {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+  },
+  deleteProduct(token, id){
+    return axios
+      .get(adminUrl+`delete-product/${id}`, {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+  },
+
 };

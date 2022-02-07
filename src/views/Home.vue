@@ -29,17 +29,30 @@
               </v-chip>
             </router-link>
             </v-item>
+              <v-chip v-if="this.$store.getters.getUser.is_staff">
+                <AddCategory :getCategories="this.getCategories" />
+              </v-chip>
           </v-item-group>
        </div>
        <div class="row">
           <h3 class="mt-2 col col-12"><strong>Latest Products <i class="fas fa-plus-square"></i></strong></h3>
-          <div v-for="product in this.$store.getters.getLatestProducts" :key="product.id" class="col-md-3 col-6">
+          <div v-for="product in this.$store.getters.getLatestProducts" :key="product.id" class="col-md-2 col-4">
             <ProductBox :product="product" />
           </div>
           <v-divider class="mt-3"></v-divider>
-          <h3 class="mt-2 col col-12"><strong>Our Products <i class="fas fa-ad"></i></strong></h3>
-          <div v-for="product in this.$store.getters.getProducts" :key="product.id" class="col-md-3 col-6">
+          <h3 class=" col col-12"><strong>Our Products <i class="fas fa-ad"></i></strong></h3>
+          <div v-for="product in this.$store.getters.getProducts.results" :key="product.id" class="col-md-2 col-4 m-0">
             <ProductBox :product="product" />
+          </div>
+          <div class="text-right">
+            <v-pagination
+              v-model="page"
+              :length="pages"
+              circle
+              color="purple white--text"
+              @input="handlePageChange"
+              class="mb-5"
+            ></v-pagination>
           </div>
         </div>
       </v-container>
@@ -49,10 +62,12 @@
 <script>
 import AuthService from '@/services/AuthService.js';
 import ProductBox from '@/components/ProductBox.vue';
+import AddCategory from '@/components/AddCategory.vue';
 export default {
   name: 'Home',
   components: {
-    ProductBox
+    ProductBox,
+    AddCategory
   },
    data () {
       return {
@@ -72,6 +87,8 @@ export default {
         ],
       loading: false,
       selection: 1,
+      page: 1,
+      pages:1,
       }
     },
     methods: {
@@ -98,12 +115,25 @@ export default {
         const response = await AuthService.categoryList();
         this.$store.commit('setIsLoading', false);
         this.$store.commit('SET_CATEGORIES', response)
+      },
+      async handlePageChange(){
+        console.log(this.page)
+        this.$store.commit('setIsLoading')
+        const response = await AuthService.productsList(this.page);
+        this.$store.commit('setIsLoading');
+        this.$store.commit('SET_PRODUCTS', response)
       }
     },
     mounted: function(){
       this.getLatestProducts();
       this.getProducts();
       this.getCategories();
-    }
+      const count = this.$store.getters.getProducts.count
+      if (count%6){
+        this.pages = count/6 +1
+      }else{
+        this.pages = count/6;
+      }
+    },
 }
 </script>

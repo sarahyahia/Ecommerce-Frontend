@@ -51,7 +51,7 @@
                                 </v-btn>
                             </template>
 
-                            <v-card class="overflow-hidden">
+                            <v-card class="overflow-hidden h-100">
                                 <v-card-title class="text-h5 grey lighten-2">
                                 Items Ordered
                                 </v-card-title>

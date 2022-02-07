@@ -35,10 +35,9 @@
             </p>
             <div class="m-3 text-h6 text--primary">
                <strong>Price:</strong> <strong style="color:purple"> {{ product.price }}LE </strong> 
-            </div>
-            <p class="text--primary">
-                <strong>Product Details:</strong> {{product.description}}
-            </p>
+            </div><strong>Product Details:</strong>
+            <pre class="text--primary">{{product.description}}
+            </pre>
             <p class="text--primary">
                 <strong>Vendor:</strong> {{product.vendor}}
             </p>
@@ -46,9 +45,9 @@
                 <strong>Status:</strong> {{product.status}}
             </p>
             <div class="text-danger">{{product.quantity_available}} left in the stock</div>
-            <v-text-field label="quantity" v-if="product.quantity_available" type="number" min="1" :max="product.quantity_available"  v-model="quantity"></v-text-field>
+            <v-text-field label="quantity"  v-if="!this.$store.getters.getUser.is_staff && product.quantity_available" type="number" min="1" :max="product.quantity_available"  v-model="quantity"></v-text-field>
             <v-btn
-                  v-if="product.quantity_available"
+                  v-if="!this.$store.getters.getUser.is_staff && product.quantity_available"
                   color="deep-purple darken-2"
                   class="btn btn-warning"
                   text
@@ -66,6 +65,7 @@
                         <v-btn
                         color="pink"
                         text
+                        class="btn d-block w-50"
                         v-bind="attrs"
                         @click="snackbar = false"
                         >
@@ -74,6 +74,10 @@
                     </template>
                     </v-snackbar>
                 </div>
+            <div class="mt-5" v-if="this.$store.getters.getUser.is_staff">
+                <EditProduct />
+                <DeleteProduct />
+            </div>
             </v-card-text>
             <v-card-actions>
             </v-card-actions>
@@ -84,7 +88,7 @@
     <v-divider></v-divider>
     <v-row>
           <h5 class="mt-5 col col-12"><strong>Latest Products <i class="fas fa-plus-square"></i></strong></h5>
-          <div v-for="product in this.$store.getters.getLatestProducts" :key="product.id" class="col-md-3 col-6">
+          <div v-for="product in this.$store.getters.getLatestProducts" :key="product.id" class="col-md-2 col-4">
              <ProductBox :product="product" />
           </div>
     </v-row>
@@ -95,12 +99,16 @@
 <script>
 
 import ProductBox from "@/components/ProductBox"
+import EditProduct from "@/components/EditProduct"
+import DeleteProduct from "@/components/DeleteProduct"
 import AuthService from '@/services/AuthService.js';
 
 export default({
     name:'Product',
     components: {
-      ProductBox
+      ProductBox,
+      EditProduct,
+      DeleteProduct
     },
     data() {
     return{
