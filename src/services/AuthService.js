@@ -107,4 +107,16 @@ export default {
       .then(response => response.data)
   },
 
+
+  salesByCategory(token){
+    return axios
+      .get(adminUrl+'sales-category', {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+  },
+  salesByVendor(token){
+    return axios
+      .get(adminUrl+'sales-vendor', {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+  },
+
 };

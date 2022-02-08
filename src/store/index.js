@@ -23,6 +23,8 @@ const getDefaultState = () => {
         items: [],
       },
       orders: [],
+      salesByCategory:[],
+      salesByVendor:[],
     };
   };
 
@@ -57,6 +59,12 @@ export default new Vuex.Store({
     },
     getOrders: state => {
       return state.orders
+    },
+    getSalesByCategory: state => {
+      return state.salesByCategory
+    },
+    getSalesByVendor: state => {
+      return state.salesByVendor
     }    
   },
  mutations: {
@@ -119,6 +127,12 @@ export default new Vuex.Store({
     },
     SET_ORDERS(state, orders){
       state.orders = orders
+    },
+    SET_SALES_BY_CATEGORY(state,salesByCategory){
+      state.salesByCategory= salesByCategory
+    },
+    SET_SALES_BY_VENDOR(state,salesByVendor){
+      state.salesByVendor= salesByVendor
     }
  },
  actions: {
