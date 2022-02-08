@@ -41,6 +41,11 @@
           </div>
           <v-divider class="mt-3"></v-divider>
           <h3 class=" col col-12"><strong>Our Products <i class="fas fa-ad"></i></strong></h3>
+          <v-item-group>
+            <v-chip v-if="this.$store.getters.getUser.is_staff">
+              <AddProduct />
+            </v-chip>
+          </v-item-group>
           <div v-for="product in this.$store.getters.getProducts.results" :key="product.id" class="col-md-2 col-4 m-0">
             <ProductBox :product="product" />
           </div>
@@ -63,11 +68,13 @@
 import AuthService from '@/services/AuthService.js';
 import ProductBox from '@/components/ProductBox.vue';
 import AddCategory from '@/components/AddCategory.vue';
+import AddProduct from '@/components/AddProduct.vue';
 export default {
   name: 'Home',
   components: {
     ProductBox,
-    AddCategory
+    AddCategory,
+    AddProduct
   },
    data () {
       return {

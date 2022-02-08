@@ -128,6 +128,13 @@ export default({
           this.$store.commit('SET_PRODUCT',response)
           this.product = this.$store.getters.getProduct;
       },
+      async getLatestProducts() {
+        this.$store.commit('setIsLoading')
+        const response = await AuthService.latestProducts();
+        this.$store.commit('setIsLoading');
+        this.$store.commit('SET_LATEST_PRODUCTS',response)
+
+      },
       addToCart() {
             this.snackbar = true;
             if (isNaN(this.quantity) || this.quantity < 1) {
@@ -142,10 +149,13 @@ export default({
     },
     mounted(){
         this.getProduct();
+        this.getLatestProducts();
+
     },
     watch: {
         $route(to) {
             if (to.name === 'Product') {
+                location.reload();
                 this.getProduct()
             }
         }

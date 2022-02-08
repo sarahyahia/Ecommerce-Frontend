@@ -21,7 +21,7 @@
         <v-card-title class="text-h5">
           Are you sure you want to delete this product?
         </v-card-title>
-        <v-card-text>Products associated with this category will be deleted,too.</v-card-text>
+        <!-- <v-card-text>Products associated with this category will be deleted,too.</v-card-text> -->
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn

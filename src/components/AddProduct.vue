@@ -7,18 +7,18 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn 
-            class="btn d-block w-75" 
+           
             v-bind="attrs"
             v-on="on" 
             filled 
             color="purple white--text"
           > 
-            Edit Product<v-icon>mdi-file-edit</v-icon>
+            Add Product<v-icon>mdi-plus</v-icon>
           </v-btn>
       </template>
       <v-card>
         <v-card-title>
-          <span class="text-h5">Edit Product</span>
+          <span class="text-h5">Add Product</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -82,17 +82,16 @@
                     accept="image/png, image/jpeg, image/bmp"
                     truncate-length="15"
                     v-model="image"
-                   
                 ></v-file-input>    
               </v-col> 
-              <!-- <v-col cols="12">
+              <v-col cols="12">
                 <v-text-field
                   label="Slug*"
                   v-model="slug"
                   type="text"
                   required
                 ></v-text-field>
-              </v-col> -->
+              </v-col>
               <v-col cols="12">
                   <v-textarea
                     color="black"
@@ -100,7 +99,6 @@
                     label="Description"
                 ></v-textarea>
               </v-col>
-              
             </v-row>
           </v-container>
           <small>*indicates required field</small>
@@ -138,13 +136,13 @@
     data: () => ({
         dialog: false,
         title:'',
-        // slug:'',
+        slug:'',
         description:'',
         category: '',
         status: 'available',
         quantity_available:1,
         vendor: '',
-        price:500,
+        price:0,
         image:'',
         msg: '',
         errors: [],
@@ -152,85 +150,54 @@
             value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
         ],
         category_id:0,
-        product:{}
     }),
     mounted(){
-      this.getProduct();
-      this.product = this.$store.getters.getProduct
-      console.log(this.product)
-      this.title=this.product.title;
-      // this.slug=this.product.slug;
-      this.description=this.product.description;
-      this.category=this.product.category;
-      this.status=this.product.status;
-      this.quantity_available=this.product.quantity_available;
-      this.vendor=this.product.vendor;
-      this.price=this.product.price;
-        // this.image=this.product.image;
+        
     },
     methods: {
-      async getProduct() {
-          this.$store.commit('setIsLoading')
-          const category_slug = this.$route.params.category_slug
-          const product_slug = this.$route.params.product_slug
-          const response = await AuthService.productDetail(category_slug, product_slug);
-          this.$store.commit('setIsLoading');
-          this.$store.commit('SET_PRODUCT',response)
-          this.product = this.$store.getters.getProduct;
-      },
-      async submit () {
-          try{
-              let formData = new FormData()
-              this.quantity_available > 0?
-                this.status = 'available':
-                this.status = 'sold out'
-              formData.append('title',this.title)
-              formData.append('price',this.price)
-              formData.append('vendor',this.vendor)
-              formData.append('description',this.description)
-              if(this.image ){formData.append('image',this.image)}
-              formData.append('category',this.category_id)
-              formData.append('status',this.status)
-              formData.append('slug',this.product.slug)
-              formData.append('quantity_available',this.quantity_available)
-              // console.log(formData.image)
-              const token = this.$store.getters.isLoggedIn
-              this.$store.commit('setIsLoading')
-              const response = await AuthService.editProduct(formData, token, this.product.id);
-              this.msg = response.msg
-              this.$store.commit('setIsLoading');
-              // location.reload();
-              // this.dialog = false;
-              // this.reset();
-              // this.$router.push({ path: this.product.get_absolute_url })
-              // setTimeout(this.dialog = false, 2000)
-          }catch (error) {
-              this.errors = error
-              console.log(error.response)
-          }
-      },
-      reset(){
-          this.title = ''
-          this.slug = ''
-          this.description = ''
-          this.msg = ''
-
-      },
-      categoryChanged(e){
-        this.category_id = this.$store.getters.getCategories.filter(obj => {
-          return obj.title === e
-        })[0].id
-      }
-
-    },
-    watch:{
-      $route(to) {
-            if (to.name === 'Product') {
+        async submit () {
+            try{
+                let formData = new FormData()
+                this.quantity_available > 0?
+                  this.status = 'available':
+                  this.status = 'sold out'
+                formData.append('title',this.title)
+                formData.append('price',this.price)
+                formData.append('vendor',this.vendor)
+                formData.append('description',this.description)
+                formData.append('image',this.image)
+                formData.append('category',this.category_id)
+                formData.append('slug',this.slug)
+                formData.append('status',this.status)
+                formData.append('quantity_available',this.quantity_available)
+                const token = this.$store.getters.isLoggedIn
+                this.$store.commit('setIsLoading')
+                const response = await AuthService.addProduct(formData, token);
+                this.msg = response.msg
+                this.$store.commit('setIsLoading');
                 location.reload();
-                this.getProduct()
-                this.$store.getters.getProduct;
+                // this.dialog = false;
+                // this.reset();
+                // this.$router.push({ path: this.product.get_absolute_url })
+                // setTimeout(this.dialog = false, 2000)
+            }catch (error) {
+                this.errors = error
+                console.log(error.response)
             }
+        },
+        reset(){
+            this.title = ''
+            this.slug = ''
+            this.description = ''
+            this.msg = ''
+
+        },
+        categoryChanged(e){
+          this.category_id = this.$store.getters.getCategories.filter(obj => {
+            return obj.title === e
+          })[0].id
         }
+
     }
   }
 </script>

@@ -94,6 +94,13 @@ export default {
   methods:{
     getMenuItems(){
       if (this.$store.getters.isLoggedIn){
+        if(this.$store.getters.getUser.is_staff){
+          return [
+          { title: 'Home', path: '/', icon: 'home' },
+          { title: `${this.$store.getters.getUser.username}`, path: '/account', icon: 'face' },
+          { title: 'Sales', path: '/sales', icon:'mdi-currency-usd'},
+        ]
+        }
         return [
           { title: 'Home', path: '/', icon: 'home' },
           { title: `${this.$store.getters.getUser.username}`, path: '/account', icon: 'face' },

@@ -11,6 +11,7 @@ import Search from '../views/Search.vue'
 import Cart from '../views/Cart.vue'
 import Checkout from '../views/Checkout.vue'
 import Account from '../views/Account.vue'
+import Sales from '../views/Sales.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -43,6 +44,11 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: Cart
+  },
+  {
+    path: '/sales',
+    name: 'Sales',
+    component: Sales
   },
   {
     path: '/cart/checkout',
