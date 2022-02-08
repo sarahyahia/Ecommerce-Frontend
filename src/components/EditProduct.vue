@@ -199,8 +199,8 @@
               const response = await AuthService.editProduct(formData, token, this.product.id);
               this.msg = response.msg
               this.$store.commit('setIsLoading');
-              // location.reload();
-              // this.dialog = false;
+              this.dialog = false;
+              location.reload();
               // this.reset();
               // this.$router.push({ path: this.product.get_absolute_url })
               // setTimeout(this.dialog = false, 2000)
@@ -225,12 +225,12 @@
     },
     watch:{
       $route(to) {
-            if (to.name === 'Product') {
-                location.reload();
-                this.getProduct()
-                this.$store.getters.getProduct;
-            }
-        }
+          if (to.name === 'Product') {
+              location.reload();
+              this.getProduct()
+              this.$store.getters.getProduct;
+          }
+      }
     }
   }
 </script>

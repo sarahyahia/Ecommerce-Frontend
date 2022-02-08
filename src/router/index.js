@@ -12,6 +12,7 @@ import Cart from '../views/Cart.vue'
 import Checkout from '../views/Checkout.vue'
 import Account from '../views/Account.vue'
 import Sales from '../views/Sales.vue'
+import SearchFilters from '../views/SearchFilters.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -49,6 +50,11 @@ const routes = [
     path: '/sales',
     name: 'Sales',
     component: Sales
+  },
+  {
+    path: '/searchfilters',
+    name: 'SearchFilters',
+    component: SearchFilters
   },
   {
     path: '/cart/checkout',

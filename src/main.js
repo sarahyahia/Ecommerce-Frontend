@@ -11,7 +11,6 @@ import Axios from 'axios';
 Vue.config.productionTip = false
 Vue.use(Vuelidate);
 Vue.prototype.$http = axios;
-
 // set auth header
 Axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
 
