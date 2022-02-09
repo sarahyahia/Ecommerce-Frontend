@@ -39,7 +39,7 @@
     ></v-divider>
       <v-spacer></v-spacer>
       <v-toolbar-items  style="background-color:#eee" class="hidden-xs-only">
-         <form method="get" action="/#/search">
+         <!-- <form method="get" action="/#/searchfilters">
           <v-text-field
             hide-details
             single-line
@@ -49,7 +49,7 @@
             placeholder="search for a product"
           >
           </v-text-field>
-         </form>
+         </form> -->
         <v-btn
           text
           v-for="item in getMenuItems()"
@@ -99,16 +99,20 @@ export default {
           { title: 'Home', path: '/', icon: 'home' },
           { title: `${this.$store.getters.getUser.username}`, path: '/account', icon: 'face' },
           { title: 'Sales', path: '/sales', icon:'mdi-currency-usd'},
+          { title: 'Search', path: '/searchfilters', icon:'mdi-magnify'},
         ]
         }
         return [
           { title: 'Home', path: '/', icon: 'home' },
+          { title: 'Search', path: '/searchfilters', icon:'mdi-magnify'},
           { title: `${this.$store.getters.getUser.username}`, path: '/account', icon: 'face' },
           { title: 'Cart', path: '/cart', icon: 'mdi-cart' },
+
         ]
       }else{
         return [
           { title: 'Home', path: '/', icon: 'home' },
+          { title: 'Search', path: '/searchfilters', icon:'mdi-magnify'},
           { title: 'SignUp', path: '/signup', icon: 'face' },
           { title: 'Sign In', path: '/signin', icon: 'lock_open' },
           { title: 'Cart', path: '/cart', icon: 'mdi-cart' },
