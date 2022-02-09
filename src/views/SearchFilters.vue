@@ -25,14 +25,17 @@
                                     @change="changeSearch"
                                     ></v-text-field>
                                 </v-col>
-                                <v-select
-                                    v-model="category"
-                                    :items="this.$store.getters.getCategories"
-                                    label="Category"
-                                    item-text="title"
-                                    @change="categoryChanged"
-                                    required
-                                ></v-select>
+                                <v-col col="12">
+                                    <v-select
+                                        v-model="category"
+                                        :items="this.$store.getters.getCategories"
+                                        label="Category"
+                                        item-text="title"
+                                        @change="categoryChanged"
+                                        required
+                                    ></v-select>
+                                </v-col>
+                                <v-col col="12">
                                 <v-row>
                                 <v-col cols="12" sm="6">
                                     <v-text-field
@@ -51,6 +54,7 @@
                                     ></v-text-field>
                                 </v-col>
                                 </v-row>
+                                </v-col>
                                 <v-col cols="12">
                                     <v-text-field
                                     label="Vendor"
@@ -100,7 +104,8 @@ export default {
             category: '',
             category_id:'',
             vendor:'',
-            status:''
+            status:'',
+            msg:"No Results Found, try to search with another words.",
         }
     },
     methods:{
@@ -116,11 +121,10 @@ export default {
             await axios
              .get(`http://localhost:8000/api/products/search/?title=${this.title}&max_price=${this.max_price}&min_price=${this.min_price}&category=${this.category_id}&vendor=${this.vendor}&status=${this.status}`)
              .then(response => {
-                 this.products = response.data.results
-                 console.log(response.data)
-             })
-             .catch(error => {
-                 console.log(error)
+                 console.log(response.data);
+                 this.products = response.data.results;
+             }).catch(error => {
+                 this.msg=`server is down please try again in another time ${error}`
              })
             this.$store.commit('setIsLoading');
             this.isLoading=false
@@ -137,7 +141,8 @@ export default {
             this.searchProducts(this.query);
         }
         this.products = this.$store.getters.getProducts.results
-    }
+    },
+    
 }
 </script>
 

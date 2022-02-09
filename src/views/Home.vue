@@ -46,7 +46,7 @@
               <AddProduct />
             </v-chip>
           </v-item-group>
-          <div v-for="product in this.$store.getters.getProducts.results" :key="product.id" class="col-md-2 col-4 m-0">
+          <div v-for="product in this.$store.getters.getProducts.results" :key="product.id+2000" class="col-md-2 col-4 m-0">
             <ProductBox :product="product" />
           </div>
           <div class="text-right">

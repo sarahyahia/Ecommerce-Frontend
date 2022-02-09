@@ -75,7 +75,7 @@
                     </v-snackbar>
                 </div>
             <div class="mt-5" v-if="this.$store.getters.getUser.is_staff">
-                <EditProduct />
+                <EditProduct :product="product" />
                 <DeleteProduct />
             </div>
             </v-card-text>
@@ -155,7 +155,7 @@ export default({
     watch: {
         $route(to) {
             if (to.name === 'Product') {
-                location.reload();
+                // location.reload();
                 this.getProduct()
             }
         }

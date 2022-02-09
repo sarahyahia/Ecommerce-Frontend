@@ -132,9 +132,9 @@
 
   export default {
       name:'EditProduct',
-    //   props: {
-    //       product: Object,
-    //   },
+      props: {
+          product: Object,
+      },
     data: () => ({
         dialog: false,
         title:'',
@@ -151,33 +151,12 @@
         rules: [
             value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
         ],
-        category_id:0,
-        product:{}
+        category_id:null,
     }),
     mounted(){
-      this.getProduct();
-      this.product = this.$store.getters.getProduct
-      console.log(this.product)
-      this.title=this.product.title;
-      // this.slug=this.product.slug;
-      this.description=this.product.description;
-      this.category=this.product.category;
-      this.status=this.product.status;
-      this.quantity_available=this.product.quantity_available;
-      this.vendor=this.product.vendor;
-      this.price=this.product.price;
-        // this.image=this.product.image;
     },
     methods: {
-      async getProduct() {
-          this.$store.commit('setIsLoading')
-          const category_slug = this.$route.params.category_slug
-          const product_slug = this.$route.params.product_slug
-          const response = await AuthService.productDetail(category_slug, product_slug);
-          this.$store.commit('setIsLoading');
-          this.$store.commit('SET_PRODUCT',response)
-          this.product = this.$store.getters.getProduct;
-      },
+      
       async submit () {
           try{
               let formData = new FormData()
@@ -189,7 +168,11 @@
               formData.append('vendor',this.vendor)
               formData.append('description',this.description)
               if(this.image ){formData.append('image',this.image)}
-              formData.append('category',this.category_id)
+              if(this.category_id !== null ){
+                formData.append('category',this.category_id)
+              }else{
+                formData.append('category',this.product.category)
+              }
               formData.append('status',this.status)
               formData.append('slug',this.product.slug)
               formData.append('quantity_available',this.quantity_available)
@@ -201,9 +184,6 @@
               this.$store.commit('setIsLoading');
               this.dialog = false;
               location.reload();
-              // this.reset();
-              // this.$router.push({ path: this.product.get_absolute_url })
-              // setTimeout(this.dialog = false, 2000)
           }catch (error) {
               this.errors = error
               console.log(error.response)
@@ -223,14 +203,24 @@
       }
 
     },
-    watch:{
-      $route(to) {
-          if (to.name === 'Product') {
-              location.reload();
-              this.getProduct()
-              this.$store.getters.getProduct;
-          }
+    computed: {
+      name() {
+        return this.product;
       }
+    },
+    watch:{
+     name(newVal, oldVal) {
+      this.product = newVal
+      this.title=this.product.title;
+      // this.slug=this.product.slug;
+      this.description=this.product.description;
+      this.category=this.product.category;
+      this.status=this.product.status;
+      this.quantity_available=this.product.quantity_available;
+      this.vendor=this.product.vendor;
+      this.price=this.product.price;
+      console.log(oldVal,newVal)
+    }
     }
   }
 </script>
