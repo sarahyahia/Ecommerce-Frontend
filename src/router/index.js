@@ -4,7 +4,6 @@ import LoginForm from '../views/LoginForm.vue'
 import SignupForm from '../views/SignupForm.vue'
 import Computed from '../views/Computed.vue'
 import Home from '../views/Home.vue'
-import About from '../views/About.vue'
 import Product from '../views/Product.vue'
 import Category from '../views/Category.vue'
 // import Search from '../views/Search.vue'
@@ -13,6 +12,8 @@ import Checkout from '../views/Checkout.vue'
 import Account from '../views/Account.vue'
 import Sales from '../views/Sales.vue'
 import SearchFilters from '../views/SearchFilters.vue'
+import Page500 from '../views/Page500.vue'
+// import PageNotFound from '../views/PageNotFound'
 Vue.use(VueRouter)
 
 const routes = [
@@ -21,6 +22,11 @@ const routes = [
   //   name: 'Search',
   //   component: Search
   // },
+  {
+    path: '/500',
+    name: 'Page500',
+    component: Page500
+  },
   {
     path: '/',
     name: 'Home',
@@ -61,13 +67,8 @@ const routes = [
     name: 'Checkout',
     component: Checkout,
     meta: {
-        requireLogin: true
+      requireLogin: true
     }
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: About
   },
   {
     path: '/account',
@@ -84,6 +85,11 @@ const routes = [
     name: 'Category',
     component: Category
   },
+  // {
+  //   path: '*',
+  //   name: 'PageNotFound',
+  //   component: PageNotFound
+  // },
 ]
 
 const router = new VueRouter({

@@ -70,6 +70,11 @@ export default {
             const categorySlug = this.$route.params.category_slug
             this.$store.commit('setIsLoading', true)
             const response = await AuthService.categoryDetail(categorySlug)
+            if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
             this.$store.commit('setIsLoading', false)
             this.$store.commit('SET_CATEGORY', response)
             console.log(this.$store.getters.getCategory.title);
@@ -81,6 +86,11 @@ export default {
         async getCategories() {
         this.$store.commit('setIsLoading',true)
         const response = await AuthService.categoryList();
+        if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
         this.$store.commit('setIsLoading', false);
         this.$store.commit('SET_CATEGORIES', response)
       },

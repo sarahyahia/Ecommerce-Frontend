@@ -4,7 +4,7 @@
         :loading="this.$store.getters.isLoading"
         class="mx-auto p-2 overflow-hidden"
         max-width="374"
-    >
+    >   
         <v-img
         height="50%"
         :src="product.get_image"

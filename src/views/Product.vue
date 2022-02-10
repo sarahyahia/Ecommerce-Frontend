@@ -2,7 +2,7 @@
 <div>
     <v-spacer></v-spacer>
     <v-container>
-        <p v-if="this.$store.state.isLoading">Loading...</p>
+        <p v-if="this.$store.getters.getIsLoading">Loading...</p>
     <v-row class="d-flex">
         <v-col
             key="n"
@@ -120,18 +120,28 @@ export default({
     }},
     methods:{
         async getProduct() {
-          this.$store.commit('setIsLoading')
+          this.$store.commit('setIsLoading',true)
           const category_slug = this.$route.params.category_slug
           const product_slug = this.$route.params.product_slug
           const response = await AuthService.productDetail(category_slug, product_slug);
-          this.$store.commit('setIsLoading');
+          if(response.response){
+            console.log(response.response)
+          }else if(response.request){
+            this.$store.commit('setServerError',true);
+          }
+          this.$store.commit('setIsLoading',false);
           this.$store.commit('SET_PRODUCT',response)
           this.product = this.$store.getters.getProduct;
       },
       async getLatestProducts() {
-        this.$store.commit('setIsLoading')
+        this.$store.commit('setIsLoading',true)
         const response = await AuthService.latestProducts();
-        this.$store.commit('setIsLoading');
+       if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
+        this.$store.commit('setIsLoading',false);
         this.$store.commit('SET_LATEST_PRODUCTS',response)
 
       },

@@ -1,5 +1,7 @@
 <template>
    <v-app class='wrapper'>
+    <!-- <div class="row h-4 m-5" v-if="this.$store.getters.getIsLoading" > Loading ...</div> -->
+    <div  >
     <v-carousel hide-delimiters cycle show-arrows-on-hover >
       <v-carousel-item
         v-for="(item,i) in items"
@@ -15,8 +17,8 @@
          <v-item-group>
             <v-subheader></v-subheader>
             <v-item
-              v-for="category in this.$store.getters.getCategories"
-              :key="category.id"
+              v-for="category,i in this.$store.getters.getCategories"
+              :key="i*2+100"
               v-slot="{ active, toggle }"
             >
             <router-link :to="category.get_absolute_url" class="btn">
@@ -36,9 +38,49 @@
        </div>
        <div class="row">
           <h3 class="mt-2 col col-12"><strong>Latest Products <i class="fas fa-plus-square"></i></strong></h3>
-          <div v-for="product in this.$store.getters.getLatestProducts" :key="product.id" class="col-md-2 col-4">
+          <div v-for="product,i in this.$store.getters.getLatestProducts" :key="i*3" class="col-md-2 col-4">
             <ProductBox :product="product" />
           </div>
+          <v-divider class="mt-3"></v-divider>
+          <v-row>
+            <h3 class="mt-2 col col-12"><strong>Top 10 BestSeller <i class="fas fa-plus-square"></i></strong></h3>
+            <div v-for="product,i in this.$store.getters.getSalesByProducts" :key="i*100" class="col-md-2 col-4">
+              <v-tab>
+                <v-badge
+                  color="warning"
+                  :content="10-i"
+                  style="z-index: 2"
+                  class="float-left"
+                >
+                </v-badge>
+              </v-tab>
+                <ProductBox :product="product.product" />
+            </div>
+            <!-- <v-row>
+              <v-carousel> 
+                <template v-for="(product, index) in top10products"> 
+                  <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1" 
+                                  :key="index"
+                  > 
+                    <v-row class="flex-nowrap" style="height:100%"> 
+                      <template v-for="(n,i) in columns"> 
+                        <template v-if="(+index + i) < top10products.length"> 
+                          <v-col :key="i*200"> 
+                            <v-row class="fill-height"
+                                  align="center"
+                                  justify="center"
+                            >
+                              <div class="display-3"><ProductBox :product="product.product" /></div>
+                            </v-row>
+                          </v-col> 
+                        </template> 
+                      </template> 
+                    </v-row> 
+                  </v-carousel-item> 
+                </template> 
+              </v-carousel>  
+            </v-row> -->
+          </v-row>
           <v-divider class="mt-3"></v-divider>
           <h3 class=" col col-12"><strong>Our Products <i class="fas fa-ad"></i></strong></h3>
           <v-item-group>
@@ -46,7 +88,7 @@
               <AddProduct />
             </v-chip>
           </v-item-group>
-          <div v-for="product in this.$store.getters.getProducts.results" :key="product.id+2000" class="col-md-2 col-4 m-0">
+          <div v-for="product, i in this.$store.getters.getProducts.results" :key="i+2000" class="col-md-2 col-4 m-0">
             <ProductBox :product="product" />
           </div>
           <div class="text-right">
@@ -61,6 +103,7 @@
           </div>
         </div>
       </v-container>
+      </div>
    </v-app>
 </template>
 
@@ -96,6 +139,8 @@ export default {
       selection: 1,
       page: 1,
       pages:1,
+      // i:10,
+      top10products: []
       }
     },
     methods: {
@@ -105,42 +150,98 @@ export default {
         setTimeout(() => (this.loading = false), 2000)
       },
       async getLatestProducts() {
-        this.$store.commit('setIsLoading')
+        
+
+        this.$store.commit('setIsLoading',true)
         const response = await AuthService.latestProducts();
-        this.$store.commit('setIsLoading');
+          this.$store.commit('setIsLoading',false);
+        if(response.response){
+          alert(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+
+        }
+        this.$store.commit('setServerError', false)
         this.$store.commit('SET_LATEST_PRODUCTS',response)
 
       },
       async getProducts(){
-        this.$store.commit('setIsLoading')
+        this.$store.commit('setIsLoading',true)
         const response = await AuthService.productsList();
-        this.$store.commit('setIsLoading');
+          this.$store.commit('setIsLoading',false);
+        if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
         this.$store.commit('SET_PRODUCTS', response)
       },
       async getCategories() {
         this.$store.commit('setIsLoading',true)
         const response = await AuthService.categoryList();
-        this.$store.commit('setIsLoading', false);
+        this.$store.commit('setIsLoading',false);
+        if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
         this.$store.commit('SET_CATEGORIES', response)
       },
       async handlePageChange(){
         console.log(this.page)
-        this.$store.commit('setIsLoading')
+        this.$store.commit('setIsLoading',true)
         const response = await AuthService.productsList(this.page);
-        this.$store.commit('setIsLoading');
+        this.$store.commit('setIsLoading',false);
+        if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
         this.$store.commit('SET_PRODUCTS', response)
+      },
+      async getSalesByProduct() {
+          this.$store.commit('setIsLoading',true)
+          const token = this.$store.getters.isLoggedIn
+          let response = await AuthService.salesByProduct(token);
+          this.$store.commit('setIsLoading',false);
+          if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
+          this.$store.commit('SET_SALES_BY_PRODUCT',response)
+          this.top10products = this.$store.getters.getSalesByProduct
       }
     },
     mounted: function(){
       this.getLatestProducts();
       this.getProducts();
       this.getCategories();
+      this.getSalesByProduct();
       const count = this.$store.getters.getProducts.count
       if (count%6){
-        this.pages = count/6 +1
+        this.pages = parseInt(count/6 +1)
       }else{
-        this.pages = count/6;
+        this.pages = parseInt(count/6);
       }
+    },
+    computed: {
+      columns() {
+        if (this.$vuetify.breakpoint.xl) {
+          return 4;
+        }
+
+        if (this.$vuetify.breakpoint.lg) {
+          return 3;
+        }
+
+        if (this.$vuetify.breakpoint.md) {
+          return 2;
+        }
+
+        return 1;
+      },
+
     },
 }
 </script>

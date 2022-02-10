@@ -1,6 +1,6 @@
 <template>
  <v-app>
-    <v-navigation-drawer v-model="sidebar" app>
+    <v-navigation-drawer v-if="! this.$store.getters.getServerError" v-model="sidebar" app>
       <v-list>
         <v-list-item
           v-for="item in getMenuItems()"
@@ -24,8 +24,8 @@
     </v-navigation-drawer>
 
     <v-app-bar app  style="background-color:#eee">
-      <span >
-        <v-app-bar-nav-icon @click="sidebar = !sidebar">
+      <span v-if="!this.$store.getters.getServerError" >
+        <v-app-bar-nav-icon  @click="sidebar = !sidebar">
         </v-app-bar-nav-icon>
       </span>
       <v-toolbar-title>
@@ -38,7 +38,7 @@
       vertical
     ></v-divider>
       <v-spacer></v-spacer>
-      <v-toolbar-items  style="background-color:#eee" class="hidden-xs-only">
+      <v-toolbar-items v-if="!this.$store.getters.getServerError"  style="background-color:#eee" class="hidden-xs-only">
          <!-- <form method="get" action="/#/searchfilters">
           <v-text-field
             hide-details
@@ -69,7 +69,11 @@
       </v-toolbar-items>
     </v-app-bar>
     
-    <v-main>
+    <v-main v-if="this.$store.getters.getServerError">
+      <Page500/>
+    </v-main>
+    <v-main v-else>
+      
       <router-view></router-view>
     </v-main>
     <Footer />
@@ -79,16 +83,18 @@
 <script>
 import AuthService from '@/services/AuthService.js';
 import Footer from '@/components/Footer.vue';
-
+import Page500 from '@/views/Page500.vue';
 export default {
   name: 'App',
   components: {
     Footer,
+    Page500
   },
   data(){
     return {
       appTitle: 'Store App',
       sidebar: false,
+      serverError:this.$store.getters.getServerError,
     }
   },
   methods:{
@@ -124,9 +130,13 @@ export default {
       // this.$store.dispatch('changeMsgValue', response.msg)
       this.$store.dispatch('logout', response);
       this.$router.push('/signin');
-    }
+    },
+  },
+  mounted:function(){
+    this.$store.commit('setServerError', false)
   }
 }
+
 </script>
 
 <style>

@@ -31,42 +31,50 @@ export default {
     return axios
       .get(productUrl+'latestproduct/')
       .then(response => response.data)
+      .catch(error=>error);
 
   },
   productsList(page=1){
     return axios
       .get(productUrl+`products/?page=${page}`)
       .then(response => response.data)
+      .catch(error=>error);
   },
   categoryList(){
     return axios
       .get(productUrl+'categories/')
       .then(response => response.data)
+      .catch(error=>error);
   },
   productDetail(category_slug, product_slug){
     return axios
       .get(productUrl+`products/${category_slug}/${product_slug}/`)
       .then(response => response.data)
+      .catch(error=>error);
   },
   categoryDetail(category_slug){
     return axios
       .get(productUrl+`category/${category_slug}/`)
       .then(response => response.data)
+      .catch(error=>error);
   },
   searchProduct(query){
     return axios
       .post(productUrl+'products/search/', {'query':query})
       .then(response => response.data)
+      .catch(error=>error);
   },
   checkout(data,token){
     return axios
       .post(productUrl+'cart/checkout',data, {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
   },
   orderList(token){
     return axios
       .get(productUrl+'cart/myorders',{headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
   },
 
 
@@ -78,16 +86,19 @@ export default {
     return axios
       .post(adminUrl+'add-category', data, {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
   },
   editCategory(data, token, categorySlug){
     return axios
       .post(adminUrl+`edit-category/${categorySlug}/`, data, {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
   },
   deleteCategory( token, categorySlug){
     return axios
       .get(adminUrl+`delete-category/${categorySlug}/`, {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
   },
 
 
@@ -95,16 +106,19 @@ export default {
     return axios
       .post(adminUrl+'add-product', data, {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
   },
   editProduct(data, token, id){
     return axios
       .post(adminUrl+`edit-product/${id}`, data, {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
   },
   deleteProduct(token, id){
     return axios
       .get(adminUrl+`delete-product/${id}`, {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
   },
 
 
@@ -112,11 +126,19 @@ export default {
     return axios
       .get(adminUrl+'sales-category', {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
   },
   salesByVendor(token){
     return axios
       .get(adminUrl+'sales-vendor', {headers:{'Authorization': `token ${token}`}})
       .then(response => response.data)
+      .catch(error=>error);
+  },
+  salesByProduct(){
+    return axios
+      .get(adminUrl+'top10products')
+      .then(response => response.data)
+      .catch(error=>error);
   },
 
 };

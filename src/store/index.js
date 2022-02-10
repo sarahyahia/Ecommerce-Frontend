@@ -25,6 +25,8 @@ const getDefaultState = () => {
       orders: [],
       salesByCategory:[],
       salesByVendor:[],
+      salesByProduct:[],
+      serverError:false,
     };
   };
 
@@ -35,6 +37,9 @@ export default new Vuex.Store({
  getters: {
     isLoggedIn: state => {
       return state.token;
+    },
+    getIsLoading: state => {
+      return state.isLoading
     },
     getUser: state => {
       return state.user;
@@ -65,7 +70,13 @@ export default new Vuex.Store({
     },
     getSalesByVendor: state => {
       return state.salesByVendor
-    }    
+    },
+    getSalesByProducts: state => {
+      return state.salesByProduct
+    },
+    getServerError:state => {
+      return state.serverError
+    }     
   },
  mutations: {
     changeUsernameValue(state, username) {
@@ -96,8 +107,13 @@ export default new Vuex.Store({
     SET_PRODUCT(state, product){
       state.product = product
     },
-    setIsLoading: state=>{
-      state.isLoading == true?false:true ;
+    setIsLoading: (state, isLoading) => {
+      state.isLoading = isLoading ;
+    },
+    setServerError: (state,serverError)=>{
+      state.serverError = serverError ;
+      state.user = {}
+      state.token = ''
     },
     SET_CATEGORIES(state,categories) {
       state.categories=categories;
@@ -133,6 +149,9 @@ export default new Vuex.Store({
     },
     SET_SALES_BY_VENDOR(state,salesByVendor){
       state.salesByVendor= salesByVendor
+    },
+    SET_SALES_BY_PRODUCT(state,salesByProduct){
+      state.salesByProduct = salesByProduct
     }
  },
  actions: {

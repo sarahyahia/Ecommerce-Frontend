@@ -12,8 +12,8 @@
                         <div class="row h-4 m-5" v-else-if="!products.length" > No Results Found, try to search with another words.</div>
                         <ProductHorizontal :products="products"/>
                     </v-col>
-                    <v-col class="back pt-5 ml-2" cols="12" sm="3">
-                        <v-card class="back my-5" @change="changeSearch">
+                    <v-col class="back pt-5 ml-1" cols="12" sm="3">
+                        <div class="back box my-5" @change="changeSearch">
                         <h4 class="m-5 pt-5">Filter By</h4>
                             <v-card-text>
                                 <v-col cols="12">
@@ -73,13 +73,35 @@
                                     @change="changeSearch"
                                 ></v-select>
                                 </v-col>
+                                <v-col cols="12">
+                                    <v-btn @click="reset">
+                                        Clear
+                                    </v-btn>
+                                </v-col>
                             </v-card-text>
-                        </v-card>
+                        </div>
                     </v-col>
                 </v-row>
                 <v-row>
                 </v-row>
             </v-container>
+            <v-snackbar
+                v-model="snackbar"
+                :timeout="timeout"
+                >
+                {{ msg }}
+
+                <template v-slot:action="{ attrs }">
+                    <v-btn
+                    color="warning"
+                    text
+                    v-bind="attrs"
+                    @click="reset"
+                    >
+                    Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
         </v-container>
     </v-app>
 </template>
@@ -106,6 +128,8 @@ export default {
             vendor:'',
             status:'',
             msg:"No Results Found, try to search with another words.",
+            snackbar: false,
+            timeout: 2000,
         }
     },
     methods:{
@@ -121,26 +145,35 @@ export default {
             await axios
              .get(`http://localhost:8000/api/products/search/?title=${this.title}&max_price=${this.max_price}&min_price=${this.min_price}&category=${this.category_id}&vendor=${this.vendor}&status=${this.status}`)
              .then(response => {
-                 console.log(response.data);
                  this.products = response.data.results;
              }).catch(error => {
-                 this.msg=`server is down please try again in another time ${error}`
+                 if(error.response){
+          console.log(error.response)
+        }else if(error.request){
+          this.$store.commit('setServerError',true);
+        }
              })
             this.$store.commit('setIsLoading');
             this.isLoading=false
+            if(!this.products.length){ this.snackbar = true}
         },
         changeSearch(){
             this.searchProducts();
+        },
+        reset(){
+            this.title= ''
+            this.min_price=''
+            this.max_price=''
+            this.category=''
+            this.vendor=''
+            this.status=''
+            this.snackbar=false
+            this.searchProducts();
+
         }
     },
     mounted(){
-        let uri = window.location.search.substring(1)
-        let params = new URLSearchParams(uri)
-        if (params.get('query')) {
-            this.query = params.get('query');
-            this.searchProducts(this.query);
-        }
-        this.products = this.$store.getters.getProducts.results
+        this.searchProducts();
     },
     
 }
@@ -150,4 +183,5 @@ export default {
 .back{
     background-color: #eee;
 }
+
 </style>

@@ -196,17 +196,22 @@ export default {
                     'phone': this.phone,
                     'items': items,
                 }
-                this.$store.commit('setIsLoading')
+                this.$store.commit('setIsLoading',true)
                 const token = this.$store.getters.isLoggedIn
                 try{
                 const response = await AuthService.checkout(data, token)
+                if(response.response){
+                    console.log(response.response)
+                }else if(response.request){
+                    this.$router.push('/500');
+                }
                 this.msg = response.msg
                 this.reset()
                 this.$store.commit('clearCart')
                 }catch (error) {
                     this.errors.push(error.response.data.error)
                 }
-                this.$store.commit('setIsLoading')
+                this.$store.commit('setIsLoading',false)
             }
         }
     }

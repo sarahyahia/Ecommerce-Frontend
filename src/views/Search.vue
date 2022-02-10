@@ -32,6 +32,11 @@ export default {
         async searchProducts(query){
             this.$store.commit('setIsLoading')
             const response = await AuthService.searchProduct(query);
+            if(response.response){
+                console.log(response.response)
+            }else if(response.request){
+                this.$router.push('/500');
+            }
             // this.$store.commit('SET_PRODUCTS',response);
             this.products = response
             this.$store.commit('setIsLoading');

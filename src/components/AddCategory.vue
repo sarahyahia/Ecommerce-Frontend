@@ -114,6 +114,7 @@
                     const token = this.$store.getters.isLoggedIn
                     this.$store.commit('setIsLoading')
                     const response = await AuthService.addCategory(data, token);
+                    
                     this.msg = response.msg
                     this.$store.commit('setIsLoading');
                     // this.getCategory();

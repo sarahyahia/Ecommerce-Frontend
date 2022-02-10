@@ -55,18 +55,28 @@ export default {
     methods:{
         async getUserInfo(){
             this.user= this.$store.getters.getUser;
-            this.$store.commit('setIsLoading');
+            this.$store.commit('setIsLoading',true);
             const token= this.$store.getters.isLoggedIn;
             const response = await AuthService.orderList(token);
-            this.$store.commit('setIsLoading');
+            this.$store.commit('setIsLoading',false);
+            if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
             this.$store.commit('SET_ORDERS',response)
         },
         async deactivate(){
-            this.$store.commit('setIsLoading');
+            this.$store.commit('setIsLoading',true);
             const token= this.$store.getters.isLoggedIn;
             const response = await AuthService.deactivate(token);
+            if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
             this.$store.commit('changeMsgValue', response.msg)
-            this.$store.commit('setIsLoading');
+            this.$store.commit('setIsLoading',false);
             // const response = await AuthService.logout(this.$store.getters.isLoggedIn);
             this.$store.dispatch('logout', response);
             this.$router.push('/signin');

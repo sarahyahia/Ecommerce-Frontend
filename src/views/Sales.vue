@@ -2,12 +2,18 @@
     
     <v-container>
         <v-row>
-            <v-col>
+            <v-col col="12" sm="6">
                 <ChartComp  v-if="vendorLoaded" :chartdata="vendorData" :options="options"/>
+            </v-col>
+            <v-col col="12" sm="6">
+                <ChartComp  v-if="categoryLoaded" :chartdata="categoryData" :options="options"/>
             </v-col>
         </v-row>
         <v-row>
-            <v-col>
+            <v-col col="12" sm="6">
+                <ChartComp  v-if="productLoaded" :chartdata="productData" :options="options"/>
+            </v-col>
+            <v-col col="12" sm="6">
                 <ChartComp  v-if="categoryLoaded" :chartdata="categoryData" :options="options"/>
             </v-col>
         </v-row>
@@ -26,6 +32,7 @@ export default {
     data: () => ({
         vendorLoaded: false,
         categoryLoaded: false,
+        productLoaded:false,
         response:[],
         vendorData: {
             labels: [],
@@ -47,6 +54,16 @@ export default {
                 }
             ]
         },
+        productData: {
+            labels: [],
+            datasets: [
+                {
+                label: 'Top 10 best seller products',
+                backgroundColor: 'pink',
+                data: []
+                }
+            ]
+        },
         options: {
         responsive: true,
         maintainAspectRatio: false
@@ -59,6 +76,11 @@ export default {
             this.$store.commit('setIsLoading')
             const token = this.$store.getters.isLoggedIn
             let response = await AuthService.salesByVendor(token);
+            if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
             this.$store.commit('setIsLoading');
             this.$store.commit('SET_SALES_BY_VENDOR',response)
             this.vendors = response.map(sale=> sale.vendor)
@@ -66,25 +88,42 @@ export default {
             this.vendorData.labels = this.vendors
             this.vendorData.datasets[0].data=this.sales
             this.vendorLoaded = true
-
-            console.log(this.vendors, this.vendorData.datasets[0].data)
         },
         async getSalesByCategory() {
             this.$store.commit('setIsLoading')
             const token = this.$store.getters.isLoggedIn
             let response = await AuthService.salesByCategory(token);
+            if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
             this.$store.commit('setIsLoading');
             this.$store.commit('SET_SALES_BY_CATEGORY',response)
             this.categoryData.labels = response.map(sale=> sale.category)
             this.categoryData.datasets[0].data=response.map(sale=> sale.sales)
             this.categoryLoaded = true
-
-            console.log( this.categoryData.datasets[0].data)
+        },
+        async getSalesByProduct() {
+            this.$store.commit('setIsLoading')
+            const token = this.$store.getters.isLoggedIn
+            let response = await AuthService.salesByProduct(token);
+            if(response.response){
+          console.log(response.response)
+        }else if(response.request){
+          this.$store.commit('setServerError',true);
+        }
+            this.$store.commit('setIsLoading');
+            this.$store.commit('SET_SALES_BY_PRODUCT',response)
+            this.productData.labels = response.map(sale=> sale.product.title)
+            this.productData.datasets[0].data=response.map(sale=> sale.sales)
+            this.productLoaded = true
         }
     },
     mounted(){
         this.getSalesByVendor();
         this.getSalesByCategory();
+        this.getSalesByProduct();
     }
 }
 </script>
