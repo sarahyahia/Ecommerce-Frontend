@@ -134,11 +134,28 @@ export default {
       .then(response => response.data)
       .catch(error=>error);
   },
-  salesByProduct(){
+  top10Product(){
     return axios
       .get(adminUrl+'top10products')
       .then(response => response.data)
       .catch(error=>error);
   },
-
+  top10Vendor(token){
+    return axios
+      .get(adminUrl+'top10vendors', {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+      .catch(error=>error);
+  },
+  top10ProductForMonth(){
+    return axios
+      .get(adminUrl+'top10products/month')
+      .then(response => response.data)
+      .catch(error=>error);
+  },
+  top10VendorForMonth(token){
+    return axios
+      .get(adminUrl+'top10vendors/month', {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+      .catch(error=>error);
+  },
 };

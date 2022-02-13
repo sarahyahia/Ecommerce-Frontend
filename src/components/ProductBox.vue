@@ -9,16 +9,16 @@
         height="50%"
         :src="product.get_image"
         ></v-img>
-        <v-card-text>
+        <v-card-text class="p-0 display-6 h6">
         <router-link :to="product.get_absolute_url" class="btn">
         <div class="text ellipsis">
             <v-card-title class="text-concat" >{{ product.title }}</v-card-title>
         </div>
         </router-link>
-            <div class="h-6 text-danger my-2 text-subtitle-1">
+            <div class="h6 text-danger my-2 text-subtitle-1">
                 {{ product.price }} • LE 
             </div>
-            <div class="h-6 my-2 text-subtitle-1">
+            <div class="h6 my-2 text-subtitle-1">
                 {{ product.vendor }}
             </div>
             <!-- <v-chip-group
@@ -64,7 +64,7 @@ export default {
 <style scoped>
 .text {
   position: relative;
-  font-size: 10px;
+  font-size: .5rem;
   color: black;
   width: 100%; /* Could be anything you like. */
 }

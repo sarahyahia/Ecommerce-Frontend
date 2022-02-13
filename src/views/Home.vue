@@ -37,42 +37,16 @@
           </v-item-group>
        </div>
        <div class="row">
+         <hr class="my-3">
           <h3 class="mt-2 col col-12"><strong>Latest Products <i class="fas fa-plus-square"></i></strong></h3>
           <div v-for="product,i in this.$store.getters.getLatestProducts" :key="i*3" class="col-md-2 col-4">
             <ProductBox :product="product" />
           </div>
           <v-divider class="mt-3"></v-divider>
-          <swiper class="swiper" :options="swiperOption">
-    <swiper-slide>Slide 1</swiper-slide>
-    <swiper-slide>Slide 2</swiper-slide>
-    <swiper-slide>Slide 3</swiper-slide>
-    <swiper-slide>Slide 4</swiper-slide>
-    <swiper-slide>Slide 5</swiper-slide>
-    <swiper-slide>Slide 6</swiper-slide>
-    <swiper-slide>Slide 7</swiper-slide>
-    <swiper-slide>Slide 8</swiper-slide>
-    <swiper-slide>Slide 9</swiper-slide>
-    <div class="swiper-pagination" slot="pagination"></div>
-    <div class="swiper-button-prev" slot="button-prev"></div>
-    <div class="swiper-button-next" slot="button-next"></div>
-  </swiper>
-          <v-row>
-            <h3 class="mt-2 col col-12"><strong>Top 10 BestSeller <i class="fas fa-plus-square"></i></strong></h3>
-            <div v-for="product,i in this.$store.getters.getSalesByProducts" :key="i*100" class="col-md-2 col-4">
-              <v-tab>
-                <v-badge
-                  color="warning"
-                  :content="10-i"
-                  style="z-index: 2"
-                  class="float-left"
-                >
-                </v-badge>
-              </v-tab>
-                <ProductBox :product="product.product" />
-            </div>
-          </v-row>
-          <v-divider class="mt-3"></v-divider>
-          <h3 class=" col col-12"><strong>Our Products <i class="fas fa-ad"></i></strong></h3>
+          <h3 class="mt-2 col col-12"><strong>Top 10 Best Products <i class="fas fa-plus-square"></i></strong></h3>
+          <Slider :products="this.$store.getters.getSalesByProducts"/>
+          <hr class="my-3">
+          <h3 class="mt-3 col col-12 "><strong>Our Products <i class="fas fa-ad"></i></strong></h3>
           <v-item-group>
             <v-chip v-if="this.$store.getters.getUser.is_staff">
               <AddProduct />
@@ -102,12 +76,14 @@ import AuthService from '@/services/AuthService.js';
 import ProductBox from '@/components/ProductBox.vue';
 import AddCategory from '@/components/AddCategory.vue';
 import AddProduct from '@/components/AddProduct.vue';
+import Slider from '@/components/Slider.vue';
 export default {
   name: 'Home',
   components: {
     ProductBox,
     AddCategory,
-    AddProduct
+    AddProduct,
+    Slider
   },
    data () {
       return {
