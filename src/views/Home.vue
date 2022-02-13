@@ -42,6 +42,20 @@
             <ProductBox :product="product" />
           </div>
           <v-divider class="mt-3"></v-divider>
+          <swiper class="swiper" :options="swiperOption">
+    <swiper-slide>Slide 1</swiper-slide>
+    <swiper-slide>Slide 2</swiper-slide>
+    <swiper-slide>Slide 3</swiper-slide>
+    <swiper-slide>Slide 4</swiper-slide>
+    <swiper-slide>Slide 5</swiper-slide>
+    <swiper-slide>Slide 6</swiper-slide>
+    <swiper-slide>Slide 7</swiper-slide>
+    <swiper-slide>Slide 8</swiper-slide>
+    <swiper-slide>Slide 9</swiper-slide>
+    <div class="swiper-pagination" slot="pagination"></div>
+    <div class="swiper-button-prev" slot="button-prev"></div>
+    <div class="swiper-button-next" slot="button-next"></div>
+  </swiper>
           <v-row>
             <h3 class="mt-2 col col-12"><strong>Top 10 BestSeller <i class="fas fa-plus-square"></i></strong></h3>
             <div v-for="product,i in this.$store.getters.getSalesByProducts" :key="i*100" class="col-md-2 col-4">
@@ -56,30 +70,6 @@
               </v-tab>
                 <ProductBox :product="product.product" />
             </div>
-            <!-- <v-row>
-              <v-carousel> 
-                <template v-for="(product, index) in top10products"> 
-                  <v-carousel-item v-if="(index + 1) % columns === 1 || columns === 1" 
-                                  :key="index"
-                  > 
-                    <v-row class="flex-nowrap" style="height:100%"> 
-                      <template v-for="(n,i) in columns"> 
-                        <template v-if="(+index + i) < top10products.length"> 
-                          <v-col :key="i*200"> 
-                            <v-row class="fill-height"
-                                  align="center"
-                                  justify="center"
-                            >
-                              <div class="display-3"><ProductBox :product="product.product" /></div>
-                            </v-row>
-                          </v-col> 
-                        </template> 
-                      </template> 
-                    </v-row> 
-                  </v-carousel-item> 
-                </template> 
-              </v-carousel>  
-            </v-row> -->
           </v-row>
           <v-divider class="mt-3"></v-divider>
           <h3 class=" col col-12"><strong>Our Products <i class="fas fa-ad"></i></strong></h3>

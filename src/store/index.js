@@ -112,8 +112,8 @@ export default new Vuex.Store({
     },
     setServerError: (state,serverError)=>{
       state.serverError = serverError ;
-      state.user = {}
-      state.token = ''
+      // state.user = {}
+      // state.token = ''
     },
     SET_CATEGORIES(state,categories) {
       state.categories=categories;
