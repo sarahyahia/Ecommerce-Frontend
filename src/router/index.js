@@ -13,6 +13,7 @@ import Account from '../views/Account.vue'
 import Sales from '../views/Sales.vue'
 import SearchFilters from '../views/SearchFilters.vue'
 import Page500 from '../views/Page500.vue'
+import ChangesLog from '../views/ChangesLog.vue'
 // import PageNotFound from '../views/PageNotFound'
 Vue.use(VueRouter)
 
@@ -74,6 +75,11 @@ const routes = [
     path: '/account',
     name: 'Account',
     component: Account
+  },
+  {
+    path: '/changeslog',
+    name: 'ChangesLog',
+    component: ChangesLog
   },
   {
     path: '/:category_slug/:product_slug',

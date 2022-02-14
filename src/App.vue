@@ -106,6 +106,7 @@ export default {
           { title: `${this.$store.getters.getUser.username}`, path: '/account', icon: 'face' },
           { title: 'Sales', path: '/sales', icon:'mdi-currency-usd'},
           { title: 'Search', path: '/searchfilters', icon:'mdi-magnify'},
+          { title: 'changes log', path: '/changeslog', icon:'mdi-delta'},
         ]
         }
         return [

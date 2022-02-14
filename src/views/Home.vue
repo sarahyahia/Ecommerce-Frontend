@@ -168,7 +168,7 @@ export default {
       async getSalesByProduct() {
           this.$store.commit('setIsLoading',true)
           const token = this.$store.getters.isLoggedIn
-          let response = await AuthService.salesByProduct(token);
+          let response = await AuthService.top10Product(token);
           this.$store.commit('setIsLoading',false);
           if(response.response){
           console.log(response.response)
@@ -190,24 +190,6 @@ export default {
       }else{
         this.pages = parseInt(count/6);
       }
-    },
-    computed: {
-      columns() {
-        if (this.$vuetify.breakpoint.xl) {
-          return 4;
-        }
-
-        if (this.$vuetify.breakpoint.lg) {
-          return 3;
-        }
-
-        if (this.$vuetify.breakpoint.md) {
-          return 2;
-        }
-
-        return 1;
-      },
-
     },
 }
 </script>

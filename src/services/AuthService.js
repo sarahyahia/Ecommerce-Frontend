@@ -158,4 +158,16 @@ export default {
       .then(response => response.data)
       .catch(error=>error);
   },
+  productChangesLog(token){
+    return axios
+      .get(adminUrl+'products-changes-log', {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+      .catch(error=>error);
+  },
+  deleteProductChangesLog(token, id){
+    return axios
+      .get(adminUrl+`products-changes-log/delete/${id}`, {headers:{'Authorization': `token ${token}`}})
+      .then(response => response.data)
+      .catch(error=>error)
+  },
 };
