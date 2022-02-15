@@ -23,6 +23,10 @@ export default {
   name: 'Signup',
   components: {
     SignupForm,
+  },
+  mounted(){
+    document.title="Signup | Store App";
+
   }
 }
 </script>

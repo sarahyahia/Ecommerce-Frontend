@@ -4,12 +4,12 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Axios from 'axios';
 import createPersistedState from 'vuex-persistedstate';
-
+import AuthService from '@/services/AuthService.js';
 Vue.use(Vuex);
 
 const getDefaultState = () => {
     return {
-      token: '',
+      token: {},
       user: {},
       count: 0,
       msg:'',
@@ -35,8 +35,11 @@ export default new Vuex.Store({
  plugins: [createPersistedState()],
  state: getDefaultState(),
  getters: {
-    isLoggedIn: state => {
-      return state.token;
+    isLoggedIn(state){
+      return state.token.access;
+    },
+    getRefreshToken(state){
+      return state.token.refresh;
     },
     getIsLoading: state => {
       return state.isLoading
@@ -88,6 +91,12 @@ export default new Vuex.Store({
     },
     increment (state) {
         state.count++
+    },
+    async SET_ACCESS_TOKEN(state){
+      const response = await AuthService.refresh(state.token.refresh);
+      console.log(response.access);
+      state.token.access = response.access
+      return state.token.access;
     },
     SET_TOKEN: (state, token) => {
         state.token = token;
@@ -158,12 +167,12 @@ export default new Vuex.Store({
     increment (context) {
       context.commit('increment')
     },
-    login: ({ commit }, { token, user, msg }) => {
-        commit('SET_TOKEN', token);
+    login: ({ commit }, { jwt_token, user, msg }) => {
+        commit('SET_TOKEN', jwt_token);
         commit('SET_USER', user);
         commit('changeMsgValue', msg)
         // set auth header
-        Axios.defaults.headers.common['Authorization'] = `token ${token}`;
+        Axios.defaults.headers.common['Authorization'] = `Bearer ${jwt_token.access}`;
     },
     logout: ({ commit }, { msg })=>{
       commit('RESET');
@@ -171,6 +180,9 @@ export default new Vuex.Store({
     },
     search: ({ commit },{products})=>{
       commit('SET_PRODUCTS',products);
+    },
+    accessToken:(context)=>{
+      context.commit('SET_ACCESS_TOKEN')
     }
  }
 });

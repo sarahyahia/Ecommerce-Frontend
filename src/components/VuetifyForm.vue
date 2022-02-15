@@ -113,9 +113,9 @@
                     };
                     const response = await AuthService.login(credentials);
                     const msg = response.msg;
-                    const token = response.token;
+                    const jwt_token = response.jwt_token;
                     const user = response.user;
-                    this.$store.dispatch('login', { token, user, msg });
+                    this.$store.dispatch('login', { jwt_token, user, msg });
                     window.history.back()
                 }catch (error) {
                     this.msg = error.response.data.error;

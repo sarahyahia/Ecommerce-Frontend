@@ -242,6 +242,7 @@ export default {
         },
     },
     mounted(){
+        document.title="Sales | Store App";
         this.getSalesByVendor();
         this.getSalesByCategory();
         this.getTop10Product();

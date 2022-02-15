@@ -180,6 +180,7 @@ export default {
       }
     },
     mounted: function(){
+      document.title="Home | Store App";
       this.getLatestProducts();
       this.getProducts();
       this.getCategories();

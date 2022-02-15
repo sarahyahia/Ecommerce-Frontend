@@ -104,6 +104,7 @@ export default {
         }
     },
     mounted(){
+        document.title="Categories | Store App";
         this.getCategory();
         this.getCategories();
     }

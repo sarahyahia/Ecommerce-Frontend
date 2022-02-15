@@ -158,6 +158,7 @@ export default({
         }
     },
     mounted(){
+        document.title="Product | Store App";
         this.getProduct();
         this.getLatestProducts();
 

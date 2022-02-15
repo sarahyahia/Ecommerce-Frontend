@@ -84,6 +84,7 @@ export default {
         }
     },
     mounted(){
+        document.title="Account | Store App";
         this.getUserInfo();
     }
 }

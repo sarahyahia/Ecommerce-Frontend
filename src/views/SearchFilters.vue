@@ -173,6 +173,7 @@ export default {
         }
     },
     mounted(){
+        document.title="Search | Store App";
         this.searchProducts();
     },
     

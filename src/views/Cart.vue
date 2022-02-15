@@ -40,6 +40,7 @@ export default {
     },
     mounted() {
         this.cart = this.$store.getters.getCart;
+        document.title="Cart | Store App"
     },
     computed: {
         cartTotalLength() {

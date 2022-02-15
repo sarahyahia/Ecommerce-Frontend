@@ -81,6 +81,7 @@ export default {
         }
     },
     mounted(){
+        document.title="Product Changes Log | Store App";
         this.getProductChangesLog();
     },
     watch: {

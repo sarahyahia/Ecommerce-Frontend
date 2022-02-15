@@ -26,6 +26,9 @@ export default {
   name: 'LoginForm',
   components: {
     VuetifyForm,
+  },
+  mounted(){
+    document.title="Login | Store App";
   }
 }
 </script>

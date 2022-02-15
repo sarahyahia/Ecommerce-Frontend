@@ -121,7 +121,7 @@
 <script>
 
 import AuthService from '@/services/AuthService.js';
-
+import {loadStripe} from '@stripe/stripe-js/pure';
 
 export default {
     name: "Checkout",
@@ -135,12 +135,28 @@ export default {
             address: '',
             zipcode: '',
             place: '',
+            stripe: {},
+            card: {},
             errors: [],
             msg:'',
         }
     },
+    created() {
+        if (this.cartTotalLength > 0) {
+            loadStripe(`pk_test_51IekVlDXAZQjI1ksNZhrI6hovgFp3sHw9qSR9rXhdgG1hnu4K1UGCLME4TEgTBuRVUBwSqLj5bNW6bflp9gy1A1500HOwEc7nG`).
+            then ( (result) =>{
+                this.stripe = result;
+                console.log(result);
+                const elements = result.elements
+                this.card = elements.create('card', { hidePostalCode: true })
+                this.card.mount('#card-element')
+            })
+        }
+    },
     mounted(){
+        document.title="Checkout | Store App";
         this.cart = this.$store.getters.getCart
+        
     },
     computed: {
         cartTotalPrice() {
@@ -161,7 +177,7 @@ export default {
         reset () {
             this.$refs.form.reset()
         },
-        async submit() {
+        submit() {
             if (this.phone === '') {
                 this.errors.push('The phone field is missing!')
             }
@@ -176,8 +192,19 @@ export default {
             }
             if (!this.errors.length) {
                 this.$store.commit('setIsLoading', true)
-            
 
+             this.stripe.createToken(this.card).then(result => {                    
+                    if (result.error) {
+                        this.$store.commit('setIsLoading', false)
+                        this.errors.push('Something went wrong with Stripe. Please try again')
+                        console.log(result.error.message)
+                    } else {
+                        this.stripeTokenHandler(result.token)
+                    }
+                })
+            }},
+            async stripeTokenHandler(stripeToken){
+            
                 const items = []
                 for (let i = 0; i < this.cart.items.length; i++) {
                     const item = this.cart.items[i]
@@ -189,12 +216,14 @@ export default {
                     items.push(obj)
                 }
 
+
                 const data = {
                     'address': this.address,
                     'zipcode': this.zipcode,
                     'place': this.place,
                     'phone': this.phone,
                     'items': items,
+                    'stripe_token': stripeToken.id
                 }
                 this.$store.commit('setIsLoading',true)
                 const token = this.$store.getters.isLoggedIn
@@ -215,6 +244,4 @@ export default {
             }
         }
     }
-
-}
 </script>

@@ -127,7 +127,7 @@ export default {
       }
     },
     async logout() {
-      const response = await AuthService.logout(this.$store.getters.isLoggedIn);
+      const response = await AuthService.logout(this.$store.getters.getRefreshToken);
       // this.$store.dispatch('changeMsgValue', response.msg)
       this.$store.dispatch('logout', response);
       this.$router.push('/signin');
@@ -135,6 +135,7 @@ export default {
   },
   mounted:function(){
     this.$store.commit('setServerError', false)
+    this.$store.dispatch('accessToken');
   }
 }
 
