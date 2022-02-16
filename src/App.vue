@@ -82,6 +82,7 @@
 
 <script>
 import AuthService from '@/services/AuthService.js';
+import {initSession} from "./session-manager";
 import Footer from '@/components/Footer.vue';
 import Page500 from '@/views/Page500.vue';
 export default {
@@ -132,15 +133,20 @@ export default {
       this.$store.dispatch('logout', response);
       this.$router.push('/signin');
     },
-    async getAccessToken() {
-      const response = await AuthService.refresh(this.$store.getters.getRefreshToken);
-      const access = response.access
-      this.$store.dispatch('accessToken', {access});
-    },
+  },
+  computed: {
+    name() {
+      return this.$store.getters.isLoggedIn;
+    }
+  },
+  watch:{
+    name(newVal, oldVal) {
+      console.log(oldVal,newVal)
+    }
   },
   mounted:function(){
     this.$store.commit('setServerError', false);
-    this.getAccessToken();
+    initSession(); 
     
   }
 }

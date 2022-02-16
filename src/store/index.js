@@ -3,12 +3,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import Axios from 'axios';
+import addSeconds from "date-fns/addSeconds";
 import createPersistedState from 'vuex-persistedstate';
 Vue.use(Vuex);
 
 const getDefaultState = () => {
     return {
       token: {},
+      tokenExpiry:'',
       user: {},
       count: 0,
       msg:'',
@@ -29,7 +31,7 @@ const getDefaultState = () => {
     };
   };
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
  strict: true,
  plugins: [createPersistedState()],
  state: getDefaultState(),
@@ -39,6 +41,9 @@ export default new Vuex.Store({
     },
     getRefreshToken(state){
       return state.token.refresh;
+    },
+    getTokenExpiry(state){
+      return state.tokenExpiry
     },
     getIsLoading: state => {
       return state.isLoading
@@ -92,10 +97,13 @@ export default new Vuex.Store({
         state.count++
     },
     SET_ACCESS_TOKEN(state, accessToken) {
+      state.tokenExpiry = addSeconds(new Date(), 5*60)
+
       state.token.access = accessToken
     },
     SET_TOKEN: (state, token) => {
-        state.token = token;
+      state.tokenExpiry = addSeconds(new Date(), 5*60)
+      state.token = token;
     },
     SET_USER: (state, user) => {
         state.user = user;
@@ -182,3 +190,5 @@ export default new Vuex.Store({
     }
  }
 });
+
+export default store
