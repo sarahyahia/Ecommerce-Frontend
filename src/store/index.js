@@ -4,7 +4,6 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Axios from 'axios';
 import createPersistedState from 'vuex-persistedstate';
-import AuthService from '@/services/AuthService.js';
 Vue.use(Vuex);
 
 const getDefaultState = () => {
@@ -92,11 +91,8 @@ export default new Vuex.Store({
     increment (state) {
         state.count++
     },
-    async SET_ACCESS_TOKEN(state){
-      const response = await AuthService.refresh(state.token.refresh);
-      console.log(response.access);
-      state.token.access = response.access
-      return state.token.access;
+    SET_ACCESS_TOKEN(state, accessToken) {
+      state.token.access = accessToken
     },
     SET_TOKEN: (state, token) => {
         state.token = token;
@@ -181,8 +177,8 @@ export default new Vuex.Store({
     search: ({ commit },{products})=>{
       commit('SET_PRODUCTS',products);
     },
-    accessToken:(context)=>{
-      context.commit('SET_ACCESS_TOKEN')
+    accessToken:({ commit}, {access})=>{
+      commit('SET_ACCESS_TOKEN',access)
     }
  }
 });

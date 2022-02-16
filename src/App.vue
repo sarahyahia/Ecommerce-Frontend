@@ -132,10 +132,16 @@ export default {
       this.$store.dispatch('logout', response);
       this.$router.push('/signin');
     },
+    async getAccessToken() {
+      const response = await AuthService.refresh(this.$store.getters.getRefreshToken);
+      const access = response.access
+      this.$store.dispatch('accessToken', {access});
+    },
   },
   mounted:function(){
-    this.$store.commit('setServerError', false)
-    this.$store.dispatch('accessToken');
+    this.$store.commit('setServerError', false);
+    this.getAccessToken();
+    
   }
 }
 

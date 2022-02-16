@@ -54,7 +54,6 @@
         >{{ error }}</v-alert>
         <v-form
             ref="form"
-            v-model="valid"
             lazy-validation
         >
             <v-text-field
@@ -83,22 +82,17 @@
             required
             ></v-text-field>
 
-            <v-checkbox
-            v-model="checkbox"
-            :rules="[v => !!v || 'You must agree to continue!']"
-            label="Do you agree to our terms of service?"
-            required
-            ></v-checkbox>
-
+            <div id="card-element" class="mb-5"></div>
+            <hr>
+            <template v-if="cartTotalLength">
             <v-btn
-            :disabled="!valid"
             color="success"
             class="mr-4"
             @click="submit"
             >
-            Submit
+            Pay with stripe
             </v-btn>
-
+            </template>
             <v-btn
             color="purple white--text"
             class="mr-4"
@@ -142,20 +136,20 @@ export default {
         }
     },
     created() {
+        },
+    mounted(){
+        document.title="Checkout | Store App";
+        this.cart = this.$store.getters.getCart
         if (this.cartTotalLength > 0) {
             loadStripe(`pk_test_51IekVlDXAZQjI1ksNZhrI6hovgFp3sHw9qSR9rXhdgG1hnu4K1UGCLME4TEgTBuRVUBwSqLj5bNW6bflp9gy1A1500HOwEc7nG`).
             then ( (result) =>{
                 this.stripe = result;
                 console.log(result);
-                const elements = result.elements
+                const elements = result.elements()
                 this.card = elements.create('card', { hidePostalCode: true })
                 this.card.mount('#card-element')
             })
         }
-    },
-    mounted(){
-        document.title="Checkout | Store App";
-        this.cart = this.$store.getters.getCart
         
     },
     computed: {
@@ -192,56 +186,58 @@ export default {
             }
             if (!this.errors.length) {
                 this.$store.commit('setIsLoading', true)
-
+            // console.log()
              this.stripe.createToken(this.card).then(result => {                    
                     if (result.error) {
                         this.$store.commit('setIsLoading', false)
                         this.errors.push('Something went wrong with Stripe. Please try again')
                         console.log(result.error.message)
                     } else {
+                        console.log(result.token)
                         this.stripeTokenHandler(result.token)
                     }
                 })
-            }},
-            async stripeTokenHandler(stripeToken){
-            
-                const items = []
-                for (let i = 0; i < this.cart.items.length; i++) {
-                    const item = this.cart.items[i]
-                    const obj = {
-                        product: item.product.id,
-                        quantity: item.quantity,
-                        price: item.product.price * item.quantity
-                    }
-                    items.push(obj)
+        }},
+        async stripeTokenHandler(stripeToken){
+        
+            const items = []
+            for (let i = 0; i < this.cart.items.length; i++) {
+                const item = this.cart.items[i]
+                const obj = {
+                    product: item.product.id,
+                    quantity: item.quantity,
+                    price: item.product.price * item.quantity
                 }
-
-
-                const data = {
-                    'address': this.address,
-                    'zipcode': this.zipcode,
-                    'place': this.place,
-                    'phone': this.phone,
-                    'items': items,
-                    'stripe_token': stripeToken.id
-                }
-                this.$store.commit('setIsLoading',true)
-                const token = this.$store.getters.isLoggedIn
-                try{
-                const response = await AuthService.checkout(data, token)
-                if(response.response){
-                    console.log(response.response)
-                }else if(response.request){
-                    this.$router.push('/500');
-                }
-                this.msg = response.msg
-                this.reset()
-                this.$store.commit('clearCart')
-                }catch (error) {
-                    this.errors.push(error.response.data.error)
-                }
-                this.$store.commit('setIsLoading',false)
+                items.push(obj)
             }
+
+
+            const data = {
+                'address': this.address,
+                'zipcode': this.zipcode,
+                'place': this.place,
+                'phone': this.phone,
+                'items': items,
+                'stripe_token': stripeToken.id
+            }
+            this.$store.commit('setIsLoading',true)
+            const token = this.$store.getters.isLoggedIn
+            console.log(token)
+            try{
+            const response = await AuthService.checkout(data, token)
+            if(response.response){
+                console.log(response.response)
+            }else if(response.request){
+                this.$router.push('/500');
+            }
+            this.msg = response.msg
+            this.reset()
+            this.$store.commit('clearCart')
+            }catch (error) {
+                this.errors.push(error.response.data.error)
+            }
+            this.$store.commit('setIsLoading',false)
+        }
         }
     }
 </script>
